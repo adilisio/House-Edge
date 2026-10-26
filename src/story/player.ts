@@ -8,6 +8,7 @@ import { Story } from "inkjs";
 import { CHARACTERS, PLACES } from "./art";
 import type { SceneResult } from "../embed";
 import { parseLine, type Beat } from "./beats";
+import { loadSave, writeSave, type Save } from "./saves";
 
 export interface ActOptions {
   /** Compiled Ink JSON for this act. */
@@ -53,24 +54,9 @@ let story: Story;
 let view: View;
 
 // ---- Saving -------------------------------------------------------------
-// Browser storage can be missing or blocked; the game works without it.
 
-function save(): void {
-  try {
-    localStorage.setItem(act.saveKey, JSON.stringify({ state: story.state.ToJson(), view }));
-  } catch {
-    // Not saved this time.
-  }
-}
-
-/** Read any act's save; the act two page also reads act one's flags this way. */
-export function loadSave(saveKey: string): { state: string; view: View } | null {
-  try {
-    const raw = localStorage.getItem(saveKey);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
+function save(done = false): void {
+  writeSave(act.saveKey, { state: story.state.ToJson(), view, done });
 }
 
 // ---- Drawing ------------------------------------------------------------
@@ -176,6 +162,7 @@ function step(): void {
 }
 
 function finish(): void {
+  save(true);
   act.onEnd?.(story);
   show("end");
 }
@@ -229,12 +216,12 @@ function show(name: keyof typeof screens): void {
   for (const [k, s] of Object.entries(screens)) s.hidden = k !== name;
 }
 
-function start(saved: { state: string; view: View } | null): void {
+function start(saved: Save | null): void {
   story = new Story(act.json);
   view = { panel: "casino-exterior", cast: [], beats: [], frozen: false, card: null };
   if (saved) {
     story.state.LoadJson(saved.state);
-    view = saved.view;
+    view = saved.view as View;
   } else {
     act.prepare?.(story);
   }

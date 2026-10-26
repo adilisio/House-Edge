@@ -1,11 +1,16 @@
 # House Edge
 
-A story-driven heist game for the browser. The front page (`index.html`) links
-everything: the three acts of the story (`act1.html`, the free demo, then
-`act2.html` and `act3.html`) and the four heist-night hands-on scenes, each
-playable on its own: keeping a high roller's eyes off Vince (`poker.html`),
-splicing Theo's camera loops (`cameras.html`), cracking Crane's vault by ear
-(`vault.html`), and navigating Dee's getaway (`getaway.html`).
+A story-driven heist game for the browser, in three acts of about 45 minutes in
+all. The front page (`index.html`) starts the story at act one (`act1.html`, the
+free demo), then sends you on to `act2.html` and `act3.html`. Each act's end
+screen links to the next one, and each act carries the choices from the one
+before through the browser save. The front page ticks off finished acts, points
+its big button at the next one, and counts the endings you've found.
+
+It also links the four heist-night hands-on scenes, each playable on its own:
+keeping a high roller's eyes off Vince (`poker.html`), splicing Theo's camera
+loops (`cameras.html`), cracking Crane's vault by ear (`vault.html`), and
+navigating Dee's getaway (`getaway.html`).
 
 ## Act one
 
@@ -30,11 +35,12 @@ Kessler. Then the player spends the day's slots, seven in all: each crew secret
 (Theo, Vince, Dee) takes a clue scene and a response scene, and four scouting
 scenes compete for the same time. Leo's office scene is fixed on the evening of
 day one. The responses set heist night's three checks (`theo_safe`,
-`vince_handled`, `dee_won`), which the end screen summarises for now.
+`vince_handled`, `dee_won`), which the end screen sums up before handing over to
+heist night.
 
-Act two reads act one's flags from this browser's act one save. Without one, its
-title screen asks what Sam told Kessler. Both acts share the comic player in
-`src/story/player.ts`.
+Act two reads act one's flags from this browser's act one save, but only if act
+one was played to the end. Without one, its title screen asks what Sam told
+Kessler. All three acts share the comic player in `src/story/player.ts`.
 
 ## Act three
 
@@ -48,8 +54,13 @@ button posts the outcome back (`src/embed.ts`), and the story reads it from
 The three checks from act two pick one of four endings: Name cleared, Caught,
 Betrayed or Protecting Theo. The first failed check decides, but every ending
 plays every beat. Then come the reveal, which replays the four clues, and an
-epilogue with a line for each costly hands-on result. Without an act two save,
-the title screen lets you set the checks and scouting by hand.
+epilogue with a line for each costly hands-on result. The end screen lists the
+endings found so far in this browser.
+
+Act three reads every earlier flag from a finished act two save, since act two
+holds act one's choices too. Without one, the title screen lets you set the
+checks and scouting by hand (and what Sam told Kessler, unless act one is
+finished).
 
 ## Vault prototype
 
@@ -108,7 +119,8 @@ Patrol cars see straight along their street (the yellow band), and roadblocks
 go up ahead of you after a few seconds' warning on the scanner. Being seen
 raises heat, which cools slowly out of sight. The scene ends **clean**, **made**
 (the police got a look at the car), or **chased** (heat maxed out and you ditched
-the car). Dee's act-two choice to turn on you is left out of this prototype.
+the car). Whether Dee turns on you isn't part of the drive: in act three it
+plays out in the garage afterwards.
 Keys: ← ↑ → for the calls.
 
 ## Development
@@ -128,9 +140,11 @@ npm run build      # typecheck and build to dist/
   loop rules and tuning, sounds, and screen
 - `src/getaway/drive.ts`, `src/getaway/audio.ts`, `src/getaway/main.ts`:
   getaway rules and tuning, sounds, and map screen
-- `src/story/act1.ink`, `src/story/act2.ink`: the scripts; `src/story/beats.ts`
-  turns Ink lines into comic beats; `src/story/art.ts` holds placeholder art;
-  `src/story/player.ts` is the comic player, started by `act1-main.ts` and
-  `act2-main.ts`
+- `src/story/act1.ink`, `src/story/act2.ink`, `src/story/act3.ink`: the
+  scripts; `src/story/beats.ts` turns Ink lines into comic beats; `src/story/art.ts` holds placeholder art;
+  `src/story/player.ts` is the comic player, started by `act1-main.ts`,
+  `act2-main.ts` and `act3-main.ts`; `src/story/saves.ts` reads saves across
+  acts and keeps the endings found
+- `src/menu.ts`: the front page's progress
 - `src/synth.ts`: shared Web Audio helpers
 - `src/style.css`: shared comic-book styling

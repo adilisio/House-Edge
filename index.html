@@ -12,12 +12,19 @@
     <main id="app">
       <section class="screen panel">
         <h1>House Edge</h1>
-        <p class="caption">Work in progress</p>
-        <p>A story-driven heist game. Play the story from act one, or try a heist-night scene on its own.</p>
+        <p class="caption">A heist in three acts</p>
+        <p>
+          Five years ago, Victor Crane framed you and took everything. Get a crew together, find
+          out who on it you can trust, and rob his casino on the night of his gala.
+        </p>
         <nav class="menu">
-          <a class="big-link" href="act1.html">Act one</a>
-          <a class="big-link" href="act2.html">Act two</a>
-          <a class="big-link" href="act3.html">Act three: heist night</a>
+          <a class="big-link" id="next-act" href="act1.html">Start the story</a>
+        </nav>
+        <p class="hint" id="progress">About 45 minutes in all. Your progress saves in this browser.</p>
+        <nav class="menu" id="acts">
+          <a href="act1.html" data-save="house-edge-act1">Act one: the crew</a>
+          <a href="act2.html" data-save="house-edge-act2">Act two: three days</a>
+          <a href="act3.html" data-save="house-edge-act3">Act three: heist night</a>
         </nav>
         <p class="hint">Heist-night scenes on their own</p>
         <nav class="menu">
