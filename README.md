@@ -27,9 +27,14 @@ The art is flat comic-style vector drawn in code, with no image files: a backdro
 for each of the 18 places (`src/story/art/places.ts`) and a waist-up figure for
 each of the 11 characters (`src/story/art/cast.ts`), sharing the helpers in
 `src/story/art/kit.ts`. Ink only names places and people, so any piece can be
-redrawn without touching the story.
+redrawn without touching the story. `src/story/art/panel.ts` puts it on the page,
+for the player and for the cover panels on the title and end screens (and on the
+hands-on scenes' intros when they're played on their own).
+
 Progress saves in the browser after every line, with a Continue button on the
-title screen.
+title screen. Each save records which version of the script it was made with. If
+the story has changed since, a half-played act starts over (the title screen
+says so), while finished acts still pass their choices on.
 
 ## Act two
 
@@ -147,10 +152,12 @@ npm run build      # typecheck and build to dist/
   getaway rules and tuning, sounds, and map screen
 - `src/story/act1.ink`, `src/story/act2.ink`, `src/story/act3.ink`: the
   scripts; `src/story/beats.ts` turns Ink lines into comic beats;
-  `src/story/art/` holds the art; `src/story/player.ts` is the comic player, started by `act1-main.ts`,
-  `act2-main.ts` and `act3-main.ts`; `src/story/saves.ts` reads saves across
-  acts and keeps the endings found
+  `src/story/art/` holds the art; `src/story/player.ts` is the comic player,
+  started by `act1-main.ts`, `act2-main.ts` and `act3-main.ts`;
+  `src/story/saves.ts` stores saves and the endings found, and
+  `src/story/carry.ts` reads one act's choices for the next
 - `src/menu.ts`: the front page's progress
+- `src/embed.ts`: runs a hands-on scene inside a story page and reports back
 - `src/synth.ts`: shared Web Audio helpers
 - `src/style.css`: shared comic-book styling
 
