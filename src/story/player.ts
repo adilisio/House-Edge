@@ -6,6 +6,7 @@ import "../style.css";
 import "./story.css";
 import { Story } from "inkjs";
 import { CHARACTERS, PLACES } from "./art";
+import type { SceneResult } from "../embed";
 import { parseLine, type Beat } from "./beats";
 
 export interface ActOptions {
@@ -16,6 +17,10 @@ export interface ActOptions {
   prepare?: (story: Story) => void;
   /** Called when the act's story ends, before the end screen shows. */
   onEnd?: (story: Story) => void;
+  /** Pages for the hands-on scenes this act can hand over to, by scene name. */
+  scenes?: Record<string, string>;
+  /** Whether the player scouted a scene in act two, which makes it easier. */
+  scouted?: (story: Story, scene: string) => boolean;
 }
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
@@ -39,6 +44,8 @@ interface View {
   beats: Beat[];
   frozen: boolean;
   card: string | null;
+  /** A hands-on scene waiting to be played before the story goes on. */
+  pending?: string | null;
 }
 
 let act: ActOptions;
@@ -154,9 +161,12 @@ function step(): void {
       view.beats = [...view.beats, beat].slice(-MAX_BEATS);
     }
     view.frozen = staging.freeze;
+    view.pending = staging.minigame ?? null;
     render();
     save();
     nextBtn.hidden = false;
+    nextBtn.textContent = view.pending ? "Play" : "Next";
+    if (view.pending) return;
     // Stop at a choice straight away, so there's no empty "Next" first.
     if (!story.canContinue && story.currentChoices.length) showChoices();
     return;
@@ -171,8 +181,40 @@ function finish(): void {
 }
 
 function next(): void {
-  if (!screens.play.hidden && !nextBtn.hidden) step();
+  if (screens.play.hidden || nextBtn.hidden || overlay) return;
+  if (view.pending) openScene(view.pending);
+  else step();
 }
+
+// ---- Hands-on scenes ----------------------------------------------------
+// The scene runs full screen in an iframe and posts its outcome back.
+
+let overlay: HTMLDivElement | null = null;
+
+function openScene(scene: string): void {
+  const page = act.scenes?.[scene];
+  if (!page) throw new Error(`No page for scene "${scene}"`);
+  const scouted = act.scouted?.(story, scene) ? "1" : "0";
+  overlay = document.createElement("div");
+  overlay.className = "scene-overlay";
+  const frame = document.createElement("iframe");
+  frame.src = `${page}?embed=1&scouted=${scouted}`;
+  frame.title = scene;
+  overlay.append(frame);
+  document.body.append(overlay);
+  frame.focus();
+}
+
+window.addEventListener("message", (e: MessageEvent<SceneResult>) => {
+  if (e.origin !== location.origin || e.data?.type !== "house-edge-result") return;
+  if (!overlay || e.data.scene !== view.pending) return;
+  story.variablesState.$(`${e.data.scene}_result`, e.data.outcome);
+  overlay.remove();
+  overlay = null;
+  view.pending = null;
+  nextBtn.textContent = "Next";
+  step();
+});
 
 nextBtn.addEventListener("click", next);
 comic.addEventListener("click", next);
@@ -200,7 +242,9 @@ function start(saved: { state: string; view: View } | null): void {
   render();
   if (saved) {
     // Pick up exactly where the save left off.
-    if (!story.canContinue && story.currentChoices.length) showChoices();
+    nextBtn.textContent = view.pending ? "Play" : "Next";
+    if (view.pending) nextBtn.hidden = false;
+    else if (!story.canContinue && story.currentChoices.length) showChoices();
     else if (!story.canContinue) finish();
     else nextBtn.hidden = false;
   } else {

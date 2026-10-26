@@ -310,3 +310,33 @@ button:focus-visible,
   justify-content: center;
   gap: 14px;
 }
+
+/* Front-page menu. */
+.menu {
+  display: grid;
+  gap: 8px;
+}
+
+.menu a {
+  color: var(--ink);
+  font-weight: 700;
+  border: 3px solid var(--ink);
+  background: #fff;
+  padding: 8px 12px;
+  text-decoration: none;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.menu a.big-link {
+  font-family: Bangers, Impact, sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: 1px;
+  background: var(--red);
+  color: #fff;
+}
+
+.menu a:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 3px;
+}

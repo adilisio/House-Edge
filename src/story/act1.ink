@@ -6,6 +6,8 @@
 //   # cast: A, B      who is in the panel
 //   # card            show the line as a full-panel title card
 //   # freeze          freeze-frame on this line
+//   # minigame: <s>   after this line, play hands-on scene <s>; its outcome
+//                     lands in the Ink variable <s>_result (act three)
 //
 // Flags set here carry into act two.
 

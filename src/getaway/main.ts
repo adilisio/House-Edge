@@ -1,7 +1,9 @@
 import "../style.css";
 import "./getaway.css";
+import { scouted, wireEndButton } from "../embed";
 import { GetawayAudio } from "./audio";
 import {
+  DEFAULT_DRIVE,
   DX,
   DY,
   Getaway,
@@ -296,7 +298,8 @@ function show(name: keyof typeof screens): void {
 }
 
 async function begin(): Promise<void> {
-  game = new Getaway();
+  // Scouted in act two: Sam drove the route, so the scanner's warnings come twice as early.
+  game = new Getaway(scouted ? { ...DEFAULT_DRIVE, roadblockWarning: DEFAULT_DRIVE.roadblockWarning * 2 } : DEFAULT_DRIVE);
   bubbleUntil = 0;
   sizeCanvas();
   render();
@@ -328,4 +331,4 @@ function finish(outcome: DriveOutcome): void {
 }
 
 $("#start").addEventListener("click", () => void begin());
-$("#retry").addEventListener("click", () => void begin());
+wireEndButton($<HTMLButtonElement>("#retry"), "getaway", () => game.finished ?? game.outcome(), () => void begin());

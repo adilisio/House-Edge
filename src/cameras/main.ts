@@ -1,7 +1,8 @@
 import "../style.css";
 import "./cameras.css";
+import { scouted, wireEndButton } from "../embed";
 import { CameraAudio } from "./audio";
-import { CameraLoop, MOTH_SECONDS, type LoopEvent, type LoopOutcome } from "./loop";
+import { CAMERAS, CameraLoop, MOTH_SECONDS, type LoopEvent, type LoopOutcome } from "./loop";
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
 
@@ -326,7 +327,8 @@ function show(name: keyof typeof screens): void {
 }
 
 async function begin(): Promise<void> {
-  loop = new CameraLoop();
+  // Scouted in act two: Sam has practised with Theo, so every match is looser.
+  loop = new CameraLoop(scouted ? CAMERAS.map((c) => ({ ...c, tolerance: c.tolerance + 0.15 })) : CAMERAS);
   glitchLeft = 0;
   bubbleUntil = 0;
   renderCams();
@@ -359,4 +361,4 @@ function finish(outcome: LoopOutcome): void {
 }
 
 $("#start").addEventListener("click", () => void begin());
-$("#retry").addEventListener("click", () => void begin());
+wireEndButton($<HTMLButtonElement>("#retry"), "cameras", () => loop.outcome(), () => void begin());

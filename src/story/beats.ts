@@ -12,6 +12,8 @@ export interface Staging {
   /** Set when this line changes who is in the panel. */
   cast?: string[];
   freeze: boolean;
+  /** Set when this line hands over to a hands-on scene. */
+  minigame?: string;
 }
 
 const SPEECH = /^([A-Z][A-Z .'-]*):\s+(.+)$/;
@@ -35,6 +37,9 @@ export function parseLine(line: string, tags: string[]): { beat: Beat; staging: 
         break;
       case "card":
         card = true;
+        break;
+      case "minigame":
+        staging.minigame = value;
         break;
     }
   }

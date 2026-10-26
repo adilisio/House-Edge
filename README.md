@@ -1,10 +1,11 @@
 # House Edge
 
-A story-driven heist game for the browser. This repo holds acts one and two of
-the story (`act1.html`, the free demo, and `act2.html`) and prototypes of all four heist-night hands-on moments: cracking Crane's vault by
-ear (`index.html`), keeping a high roller's eyes off Vince (`poker.html`),
-splicing Theo's camera loops (`cameras.html`), and navigating Dee's getaway
-(`getaway.html`).
+A story-driven heist game for the browser. The front page (`index.html`) links
+everything: the three acts of the story (`act1.html`, the free demo, then
+`act2.html` and `act3.html`) and the four heist-night hands-on scenes, each
+playable on its own: keeping a high roller's eyes off Vince (`poker.html`),
+splicing Theo's camera loops (`cameras.html`), cracking Crane's vault by ear
+(`vault.html`), and navigating Dee's getaway (`getaway.html`).
 
 ## Act one
 
@@ -34,6 +35,21 @@ day one. The responses set heist night's three checks (`theo_safe`,
 Act two reads act one's flags from this browser's act one save. Without one, its
 title screen asks what Sam told Kessler. Both acts share the comic player in
 `src/story/player.ts`.
+
+## Act three
+
+`src/story/act3.ink`: heist night, in the running order from the design doc. The
+four hands-on scenes play inside the story. A line tagged `# minigame: <scene>`
+shows a **Play** button that opens the scene full screen in an iframe
+(`<scene>.html?embed=1&scouted=0|1`). When the scene ends, its **Continue**
+button posts the outcome back (`src/embed.ts`), and the story reads it from
+`<scene>_result`. Scouting in act two makes each scene a little easier.
+
+The three checks from act two pick one of four endings: Name cleared, Caught,
+Betrayed or Protecting Theo. The first failed check decides, but every ending
+plays every beat. Then come the reveal, which replays the four clues, and an
+epilogue with a line for each costly hands-on result. Without an act two save,
+the title screen lets you set the checks and scouting by hand.
 
 ## Vault prototype
 

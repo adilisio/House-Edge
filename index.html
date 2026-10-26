@@ -3,55 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>House Edge Vault</title>
+    <title>House Edge</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet" />
   </head>
   <body>
     <main id="app">
-      <section id="intro" class="screen panel">
+      <section class="screen panel">
         <h1>House Edge</h1>
-        <p class="caption">Heist night. Crane's private vault.</p>
-        <p>
-          Leo is keeping the guard busy at the bar. Turn the dial slowly and listen for the faint
-          click at each number, then press <strong>Set</strong>. Each click is harder to hear than
-          the last.
-        </p>
-        <p>Wrong numbers clunk loudly and pull the guard's attention. Leo can only stall so long.</p>
-        <p class="hint">Headphones recommended.</p>
-        <label class="toggle"><input type="checkbox" id="assist" /> Show clicks on screen too</label>
-        <button id="start" class="big">Crack the vault</button>
-      </section>
-
-      <section id="play" class="screen" hidden>
-        <div class="hud panel">
-          <div class="tumblers" id="tumblers" aria-label="Numbers set"></div>
-          <div class="stall">
-            <div class="stall-label" id="stall-label">Leo's keeping the guard busy</div>
-            <div class="bar"><div class="fill" id="stall-fill"></div></div>
-          </div>
-        </div>
-        <div class="bubble" id="bubble" aria-live="polite"></div>
-        <div class="dial-wrap">
-          <svg id="dial" viewBox="-110 -118 220 228" role="slider" tabindex="0"
-               aria-label="Vault dial" aria-valuemin="0" aria-valuemax="99" aria-valuenow="0"></svg>
-        </div>
-        <div class="controls">
-          <button id="nudge-down" aria-label="Turn one number down">‹</button>
-          <button id="set" class="big">Set</button>
-          <button id="nudge-up" aria-label="Turn one number up">›</button>
-        </div>
-        <p class="hint">Drag or scroll the dial · ← → to nudge (Shift for 5) · Space to set</p>
-      </section>
-
-      <section id="end" class="screen panel" hidden>
-        <h1 id="end-title"></h1>
-        <p id="end-text"></p>
-        <p class="hint" id="end-stats"></p>
-        <button id="retry" class="big">Try again</button>
+        <p class="caption">Work in progress</p>
+        <p>A story-driven heist game. Play the story from act one, or try a heist-night scene on its own.</p>
+        <nav class="menu">
+          <a class="big-link" href="act1.html">Act one</a>
+          <a class="big-link" href="act2.html">Act two</a>
+          <a class="big-link" href="act3.html">Act three: heist night</a>
+        </nav>
+        <p class="hint">Heist-night scenes on their own</p>
+        <nav class="menu">
+          <a href="poker.html">Poker table</a>
+          <a href="cameras.html">Camera loop</a>
+          <a href="vault.html">Vault</a>
+          <a href="getaway.html">Getaway</a>
+        </nav>
       </section>
     </main>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/menu.ts"></script>
   </body>
 </html>

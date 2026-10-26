@@ -22,19 +22,21 @@ function ink(): Plugin {
 }
 
 // Relative base so the build works from any static host or subfolder.
-// One page per prototype scene, plus the act one story.
+// A menu page, one page per heist-night scene, and one per act.
 export default defineConfig({
   base: "./",
   plugins: [ink()],
   build: {
     rollupOptions: {
       input: {
-        vault: resolve(import.meta.dirname, "index.html"),
+        menu: resolve(import.meta.dirname, "index.html"),
+        vault: resolve(import.meta.dirname, "vault.html"),
         poker: resolve(import.meta.dirname, "poker.html"),
         cameras: resolve(import.meta.dirname, "cameras.html"),
         getaway: resolve(import.meta.dirname, "getaway.html"),
         act1: resolve(import.meta.dirname, "act1.html"),
         act2: resolve(import.meta.dirname, "act2.html"),
+        act3: resolve(import.meta.dirname, "act3.html"),
       },
     },
   },

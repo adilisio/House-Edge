@@ -1,5 +1,6 @@
 import "./style.css";
 import { VaultAudio } from "./audio";
+import { scouted, wireEndButton } from "./embed";
 import { Lock, defaultConfig, randomCombination, type LockEvent, type Outcome } from "./lock";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -300,7 +301,10 @@ function show(name: keyof typeof screens): void {
 }
 
 async function begin(): Promise<void> {
-  lock = new Lock(defaultConfig(randomCombination(4)));
+  const config = defaultConfig(randomCombination(4));
+  // Scouted in act two: Sam has heard this dial before, so the clicks stand out.
+  if (scouted) for (const t of config.tumblers) t.clickGain = Math.min(1, t.clickGain + 0.12);
+  lock = new Lock(config);
   unwrapped = 0;
   fraction = 0;
   nextLine = 1.5;
@@ -336,4 +340,4 @@ function finish(): void {
 
 buildDial();
 $("#start").addEventListener("click", () => void begin());
-$("#retry").addEventListener("click", () => void begin());
+wireEndButton($<HTMLButtonElement>("#retry"), "vault", () => lock.outcome(), () => void begin());

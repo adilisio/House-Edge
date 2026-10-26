@@ -1,7 +1,8 @@
 import "../style.css";
 import "./poker.css";
+import { scouted, wireEndButton } from "../embed";
 import { PokerAudio } from "./audio";
-import { Table, type Move, type PokerOutcome, type TableEvent } from "./table";
+import { DEFAULT_TABLE, Table, type Move, type PokerOutcome, type TableEvent } from "./table";
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
 
@@ -222,6 +223,10 @@ window.addEventListener("keyup", (e) => heldKeys.delete(e.key));
 function handle(events: TableEvent[]): void {
   for (const ev of events) {
     switch (ev.kind) {
+      case "drift-start":
+        // The tell Sam learned while scouting.
+        if (scouted) say("He twists the ring on his little finger...", 1.5);
+        break;
       case "looking-at-vince":
         audio?.sting();
         say("ROLLER: Hey... what's that fella doing over there?");
@@ -273,7 +278,8 @@ function show(name: keyof typeof screens): void {
 }
 
 async function begin(): Promise<void> {
-  table = new Table();
+  // Scouted in act two: Sam knows his ring tell, so his drift gives more warning.
+  table = new Table(scouted ? { ...DEFAULT_TABLE, driftSeconds: [1.9, 1.3] } : DEFAULT_TABLE);
   stare = null;
   starePad.hidden = true;
   bubble.textContent = "";
@@ -310,4 +316,4 @@ function finish(outcome: PokerOutcome): void {
 }
 
 $("#start").addEventListener("click", () => void begin());
-$("#retry").addEventListener("click", () => void begin());
+wireEndButton($<HTMLButtonElement>("#retry"), "poker", () => table.finished ?? table.outcome(), () => void begin());
