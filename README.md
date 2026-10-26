@@ -152,3 +152,14 @@ npm run build      # typecheck and build to dist/
 - `src/menu.ts`: the front page's progress
 - `src/synth.ts`: shared Web Audio helpers
 - `src/style.css`: shared comic-book styling
+
+The build uses relative paths, so `dist/` works from any static host or
+subfolder.
+
+### Deploying
+
+`.github/workflows/deploy.yml` runs the tests and the build on every pull
+request, and on every push to `Main` it also publishes `dist/` to GitHub Pages,
+at https://adilisio.github.io/House-Edge/. It needs Pages turned on once: in
+the repo's **Settings → Pages**, set **Source** to **GitHub Actions**. A deploy
+can also be started by hand from the Actions tab.
