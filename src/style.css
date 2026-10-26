@@ -305,6 +305,14 @@ button:focus-visible,
   }
 }
 
+/* The dial keeps still for players who ask for less motion; the clunk and
+   the buzz still land. The click flash stays: it stands in for sound. */
+@media (prefers-reduced-motion: reduce) {
+  #dial.shake {
+    animation: none;
+  }
+}
+
 .controls {
   display: flex;
   justify-content: center;
@@ -343,6 +351,16 @@ a.button.big-link {
   letter-spacing: 1px;
   background: var(--red);
   color: #fff;
+}
+
+/* A scene's way back to the menu sits quietly under its main button. */
+a.menu-link {
+  align-self: flex-start;
+  padding: 0 18px;
+}
+
+a.button[hidden] {
+  display: none;
 }
 
 .menu a:focus-visible,

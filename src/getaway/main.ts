@@ -1,6 +1,7 @@
 import "../style.css";
 import "./getaway.css";
 import { scouted, wireEndButton } from "../embed";
+import { drawCovers } from "../story/art/panel";
 import { GetawayAudio } from "./audio";
 import {
   DEFAULT_DRIVE,
@@ -17,6 +18,8 @@ import {
 } from "./drive";
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
+
+drawCovers();
 
 const screens = { intro: $("#intro"), play: $("#play"), end: $("#end") };
 const canvas = $<HTMLCanvasElement>("#map");
@@ -53,7 +56,7 @@ const ENDINGS: Record<DriveOutcome, { title: string; text: string }> = {
   },
   chased: {
     title: "Chased",
-    text: "With sirens on every side, Dee dumps the car in an alley and you run the last blocks on foot. Whatever was in the trunk stays behind.",
+    text: "With sirens on every side, Dee dumps the car in an alley and you run the last blocks on foot. Whatever was in the boot stays behind.",
   },
 };
 

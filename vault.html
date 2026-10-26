@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="House Edge: crack Crane's vault by ear while Leo keeps the guard talking." />
+    <meta name="theme-color" content="#1b1440" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>House Edge Vault</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,8 +16,9 @@
       <section id="intro" class="screen panel">
         <h1>House Edge</h1>
         <p class="caption">Heist night. Crane's private vault.</p>
+        <div class="comic cover standalone-only" data-place="vault-floor" data-cast="Sam, Leo, Guard" aria-hidden="true"></div>
         <p>
-          Leo is keeping the guard busy at the bar. Turn the dial slowly and listen for the faint
+          Leo is keeping the guard busy on the vault floor. Turn the dial slowly and listen for the faint
           click at each number, then press <strong>Set</strong>. Each click is harder to hear than
           the last.
         </p>
@@ -22,6 +26,7 @@
         <p class="hint">Headphones recommended.</p>
         <label class="toggle"><input type="checkbox" id="assist" /> Show clicks on screen too</label>
         <button id="start" class="big">Crack the vault</button>
+        <a class="button menu-link standalone-only" href="./">Menu</a>
       </section>
 
       <section id="play" class="screen" hidden>
@@ -50,6 +55,7 @@
         <p id="end-text"></p>
         <p class="hint" id="end-stats"></p>
         <button id="retry" class="big">Try again</button>
+        <a class="button menu-link standalone-only" href="./">Menu</a>
       </section>
     </main>
     <script type="module" src="/src/main.ts"></script>

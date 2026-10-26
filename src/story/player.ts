@@ -5,10 +5,13 @@
 import "../style.css";
 import "./story.css";
 import { Story } from "inkjs";
-import { CHARACTERS, PLACES } from "./art";
+import { PLACES } from "./art";
+import type { Mood } from "./art/cast";
+import { StoryAudio } from "./audio";
+import { drawBackdrop, drawCast, drawCovers, placeOrDefault, setMoods } from "./art/panel";
 import type { SceneResult } from "../embed";
 import { parseLine, type Beat } from "./beats";
-import { loadSave, writeSave, type Save } from "./saves";
+import { loadSave, storyVersion, writeSave, type Save } from "./saves";
 
 export interface ActOptions {
   /** Compiled Ink JSON for this act. */
@@ -48,16 +51,70 @@ interface View {
   card: string | null;
   /** A hands-on scene waiting to be played before the story goes on. */
   pending?: string | null;
+  /** Faces set by mood tags; they hold until changed or the panel moves on. */
+  moods?: Record<string, Mood>;
 }
 
 let act: ActOptions;
+let version = "";
 let story: Story;
 let view: View;
+
+// ---- Sound --------------------------------------------------------------
+// Off is remembered; on is the default. The audio starts on the click that
+// starts the story, since browsers only allow sound after a gesture.
+
+const SOUND_KEY = "house-edge-sound";
+let audio: StoryAudio | null = null;
+
+function soundWanted(): boolean {
+  try {
+    return localStorage.getItem(SOUND_KEY) !== "off";
+  } catch {
+    return true;
+  }
+}
+
+function startAudio(): void {
+  if (audio || !soundWanted()) return;
+  audio = new StoryAudio();
+  void audio.start();
+}
+
+const soundBtn = document.createElement("button");
+soundBtn.className = "sound-toggle";
+
+function showSound(): void {
+  const on = soundWanted();
+  soundBtn.textContent = on ? "Sound: on" : "Sound: off";
+  soundBtn.setAttribute("aria-pressed", String(on));
+}
+
+soundBtn.addEventListener("click", () => {
+  const on = !soundWanted();
+  try {
+    localStorage.setItem(SOUND_KEY, on ? "on" : "off");
+  } catch {
+    // Remembered for this visit only.
+  }
+  if (on) {
+    startAudio();
+    if (view) audio?.setPlace(placeOrDefault(view.panel));
+  } else {
+    audio?.stop();
+    audio = null;
+  }
+  showSound();
+  // Hand Space and Enter back to the story.
+  soundBtn.blur();
+});
+
+document.addEventListener("visibilitychange", () => audio?.pause(document.hidden || overlay !== null));
 
 // ---- Saving -------------------------------------------------------------
 
 function save(done = false): void {
-  writeSave(act.saveKey, { state: story.state.ToJson(), view, done });
+  writeSave(act.saveKey, { state: story.state.ToJson(), view, done, version });
 }
 
 // ---- Drawing ------------------------------------------------------------
@@ -66,30 +123,17 @@ function save(done = false): void {
 let drawn = { panel: "", cast: "" };
 
 function render(): void {
-  const panel = PLACES[view.panel] ? view.panel : "city-map";
+  const panel = placeOrDefault(view.panel);
   if (panel !== drawn.panel) {
-    // The art is our own markup, never story text.
-    backdropEl.innerHTML = `<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">${PLACES[panel].svg}</svg>`;
+    drawBackdrop(backdropEl, panel);
     placeEl.textContent = PLACES[panel].label;
   }
+  audio?.setPlace(panel);
   comic.classList.toggle("frozen", view.frozen);
 
   const cast = view.cast.join(",");
-  if (cast !== drawn.cast) {
-    castEl.dataset.count = String(view.cast.length);
-    castEl.replaceChildren(
-      ...view.cast.map((name) => {
-        const fig = document.createElement("div");
-        fig.className = "figure";
-        fig.innerHTML = `<svg viewBox="0 0 120 182" aria-hidden="true">${CHARACTERS[name]?.svg ?? ""}</svg>`;
-        const label = document.createElement("div");
-        label.className = "name";
-        label.textContent = name;
-        fig.append(label);
-        return fig;
-      }),
-    );
-  }
+  if (cast !== drawn.cast) drawCast(castEl, view.cast, view.moods);
+  else setMoods(castEl, view.moods ?? {});
   drawn = { panel, cast };
 
   cardEl.hidden = view.card === null;
@@ -120,6 +164,7 @@ function showChoices(): void {
       const b = document.createElement("button");
       b.textContent = choice.text;
       b.addEventListener("click", () => {
+        audio?.choice();
         story.ChooseChoiceIndex(choice.index);
         choicesEl.replaceChildren();
         step();
@@ -143,7 +188,9 @@ function step(): void {
     if (staging.panel && staging.panel !== view.panel) {
       view.panel = staging.panel;
       view.beats = [];
+      view.moods = {};
     }
+    if (staging.moods) view.moods = { ...view.moods, ...staging.moods };
     if (staging.cast) view.cast = staging.cast;
     if (beat.kind === "card") {
       view.card = beat.text;
@@ -155,6 +202,8 @@ function step(): void {
     view.frozen = staging.freeze;
     view.pending = staging.minigame ?? null;
     render();
+    if (beat.kind === "card") audio?.card();
+    if (staging.freeze) audio?.freeze();
     save();
     nextBtn.hidden = false;
     nextBtn.textContent = view.pending ? "Play" : "Next";
@@ -168,6 +217,7 @@ function step(): void {
 }
 
 function finish(): void {
+  audio?.silence();
   save(true);
   act.onEnd?.(story);
   show("end");
@@ -196,6 +246,8 @@ function openScene(scene: string): void {
   overlay.append(frame);
   document.body.append(overlay);
   frame.focus();
+  // The scene has its own sound.
+  audio?.pause(true);
 }
 
 window.addEventListener("message", (e: MessageEvent<SceneResult>) => {
@@ -204,9 +256,12 @@ window.addEventListener("message", (e: MessageEvent<SceneResult>) => {
   story.variablesState.$(`${e.data.scene}_result`, e.data.outcome);
   overlay.remove();
   overlay = null;
+  audio?.pause(false);
   view.pending = null;
   nextBtn.textContent = "Next";
   step();
+  // Focus went with the frame; put it back where the story continues.
+  if (!nextBtn.hidden) nextBtn.focus();
 });
 
 nextBtn.addEventListener("click", next);
@@ -223,6 +278,7 @@ function show(name: keyof typeof screens): void {
 }
 
 function start(saved: Save | null): void {
+  startAudio();
   story = new Story(act.json);
   view = { panel: "casino-exterior", cast: [], beats: [], frozen: false, card: null };
   if (saved) {
@@ -248,8 +304,24 @@ function start(saved: Save | null): void {
 /** Wire up the page's title and end screens for one act. */
 export function runAct(options: ActOptions): void {
   act = options;
-  continueBtn.hidden = !loadSave(act.saveKey);
-  continueBtn.addEventListener("click", () => start(loadSave(act.saveKey)));
+  showSound();
+  screens.play.append(soundBtn);
+  version = storyVersion(act.json);
+  drawCovers();
+  const saved = loadSave(act.saveKey);
+  const resumable = () => {
+    const save = loadSave(act.saveKey);
+    return save?.version === version ? save : null;
+  };
+  continueBtn.hidden = !resumable();
+  if (saved && !saved.done && !resumable()) {
+    // Played halfway on an older version of the story.
+    const note = document.createElement("p");
+    note.className = "hint";
+    note.textContent = "The story has been updated since you last played, so this act starts over. Choices from acts you finished still carry over.";
+    continueBtn.parentElement!.before(note);
+  }
+  continueBtn.addEventListener("click", () => start(resumable()));
   $("#new").addEventListener("click", () => start(null));
   $("#again").addEventListener("click", () => start(null));
 }

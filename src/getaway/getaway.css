@@ -6,6 +6,11 @@
   gap: 4px;
 }
 
+.gauge {
+  flex: 1;
+  min-width: 0;
+}
+
 .gauge-label {
   font-size: 13px;
   font-weight: 700;

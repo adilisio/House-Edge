@@ -1,6 +1,8 @@
 // Turns Ink output (a line plus its tags) into comic beats the player can draw.
 // The conventions are documented at the top of act1.ink.
 
+import { parseMoods, type Mood } from "./art/cast";
+
 export type Beat =
   | { kind: "speech"; speaker: string; text: string }
   | { kind: "caption"; text: string }
@@ -14,6 +16,8 @@ export interface Staging {
   freeze: boolean;
   /** Set when this line hands over to a hands-on scene. */
   minigame?: string;
+  /** Faces this line changes, by character. */
+  moods?: Record<string, Mood>;
 }
 
 const SPEECH = /^([A-Z][A-Z .'-]*):\s+(.+)$/;
@@ -40,6 +44,9 @@ export function parseLine(line: string, tags: string[]): { beat: Beat; staging: 
         break;
       case "minigame":
         staging.minigame = value;
+        break;
+      case "mood":
+        staging.moods = { ...staging.moods, ...parseMoods(value) };
         break;
     }
   }

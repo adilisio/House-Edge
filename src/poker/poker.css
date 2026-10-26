@@ -3,7 +3,7 @@
   --felt: #1f7a4d;
   --felt-dark: #145236;
   --skin: #e9b48a;
-  --suit: #2b2d42;
+  --suit: #f8f9fa;
 }
 
 .move-list {
@@ -174,7 +174,13 @@ button.move.active {
 }
 
 #roller .shirt {
-  fill: var(--paper);
+  fill: #1d1d1d;
+}
+
+#roller .chain {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 4;
 }
 
 #roller .gold {
@@ -187,10 +193,6 @@ button.move.active {
 
 #roller .inset {
   fill: var(--paper);
-}
-
-#roller .vince {
-  fill: var(--steel-dark);
 }
 
 #roller .label {

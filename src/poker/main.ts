@@ -1,10 +1,14 @@
 import "../style.css";
 import "./poker.css";
 import { scouted, wireEndButton } from "../embed";
+import { drawCovers } from "../story/art/panel";
 import { PokerAudio } from "./audio";
+import { figureSvg } from "../story/art";
 import { DEFAULT_TABLE, Table, type Move, type PokerOutcome, type TableEvent } from "./table";
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
+
+drawCovers();
 
 const screens = { intro: $("#intro"), play: $("#play"), end: $("#end") };
 const scene = $("#scene");
@@ -34,7 +38,7 @@ const SUSPICIOUS_LINES = ["ROLLER: What's your game, friend?", "ROLLER: Nobody b
 const ENDINGS: Record<PokerOutcome, { title: string; text: string }> = {
   clean: {
     title: "Clean",
-    text: "Vince finishes and drifts away from the next table. The high roller never once looked his way.",
+    text: "Vince finishes and drifts away from the side table. The high roller never once looked his way.",
   },
   spotted: {
     title: "Spotted",
@@ -72,6 +76,8 @@ roller.innerHTML = `
   <path class="felt-line" d="M -10 196 Q 150 160 310 196"/>
   <path class="suit ink" d="M 30 214 Q 40 168 92 160 L 148 160 Q 200 168 210 214 Z"/>
   <path class="shirt ink" d="M 100 160 L 120 196 L 140 160 Z"/>
+  <path class="chain" d="M 104 162 Q 120 190 136 162"/>
+  <path class="ink" d="M 100 160 L 92 200 M 140 160 L 148 200" fill="none"/>
   <ellipse class="skin ink" cx="120" cy="100" rx="56" ry="64"/>
   <path class="hair ink" d="M 64 92 Q 60 34 120 32 Q 182 34 176 92 Q 168 56 120 54 Q 74 56 64 92 Z"/>
   <ellipse class="white ink" id="eye-l" cx="98" cy="94" rx="14" ry="10"/>
@@ -87,8 +93,7 @@ roller.innerHTML = `
   <ellipse class="gold ink" cx="56" cy="182" rx="20" ry="7"/>
   <ellipse class="gold ink" cx="56" cy="174" rx="20" ry="7"/>
   <rect class="inset ink" x="222" y="12" width="68" height="94"/>
-  <circle class="vince ink" cx="256" cy="44" r="13"/>
-  <path class="vince ink" d="M 234 92 Q 236 64 256 62 Q 276 64 278 92 Z"/>
+  <svg x="224" y="14" width="64" height="76" viewBox="0 0 120 182" preserveAspectRatio="xMidYMax meet">${figureSvg("Vince")}</svg>
   <text class="label" x="256" y="102" text-anchor="middle">VINCE</text>
   <text class="freeze" id="freeze" x="256" y="27" text-anchor="middle" visibility="hidden">FREEZE!</text>
 `;

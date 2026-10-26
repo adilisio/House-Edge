@@ -1,8 +1,10 @@
 import act1 from "./act1.ink";
 import act2 from "./act2.ink";
 import act3 from "./act3.ink";
+import { drawCover } from "./art/panel";
 import { runAct } from "./player";
-import { ENDINGS, SAVE_KEYS, endingsFound, recordEnding, savedFlags } from "./saves";
+import { savedFlags } from "./carry";
+import { ENDINGS, SAVE_KEYS, endingsFound, recordEnding } from "./saves";
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
 
@@ -20,6 +22,14 @@ $("#carry").textContent = fromAct2
   : "No finished act two in this browser, so set up how it left things:";
 $("#setup").hidden = fromAct2 !== null;
 $("#leak-pick").hidden = fromAct1 !== null;
+
+/** The last picture of each ending. */
+const ENDING_COVERS: Record<string, { place: string; cast: string; moods: string }> = {
+  cleared: { place: "casino-floor", cast: "Sam, Leo, Theo, Dee", moods: "Sam happy, Leo happy, Theo happy, Dee happy" },
+  caught: { place: "street-night", cast: "Sam, Dee", moods: "Sam sad" },
+  betrayed: { place: "gallery", cast: "Vince", moods: "Vince happy" },
+  theo: { place: "rooftop", cast: "Sam, Theo", moods: "Sam happy, Theo happy" },
+};
 
 function showEndings(): void {
   const found = endingsFound();
@@ -56,6 +66,9 @@ runAct({
     const ending = story.variablesState.$("ending") as string;
     recordEnding(ending);
     $("#ending").textContent = ENDINGS[ending] ?? "The end";
+    const cover = $("#ending-cover");
+    Object.assign(cover.dataset, ENDING_COVERS[ending] ?? ENDING_COVERS.cleared);
+    drawCover(cover);
     showEndings();
   },
 });
