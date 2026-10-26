@@ -345,6 +345,16 @@ a.button.big-link {
   color: #fff;
 }
 
+/* A scene's way back to the menu sits quietly under its main button. */
+a.menu-link {
+  align-self: flex-start;
+  padding: 0 18px;
+}
+
+a.button[hidden] {
+  display: none;
+}
+
 .menu a:focus-visible,
 a.button:focus-visible {
   outline: 3px solid var(--teal);
