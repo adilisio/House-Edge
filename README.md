@@ -23,7 +23,11 @@ office window. The choices set flags for act two (see the top of `act1.ink`).
 
 Lines are shown as comic beats: `NAME: text` is a speech bubble and anything else a
 caption, while tags set the panel's place and cast, title cards and freeze-frames.
-The art is placeholder (coloured backdrops and silhouettes in `src/story/art.ts`).
+The art is flat comic-style vector drawn in code, with no image files: a backdrop
+for each of the 18 places (`src/story/art/places.ts`) and a waist-up figure for
+each of the 11 characters (`src/story/art/cast.ts`), sharing the helpers in
+`src/story/art/kit.ts`. Ink only names places and people, so any piece can be
+redrawn without touching the story.
 Progress saves in the browser after every line, with a Continue button on the
 title screen.
 
@@ -141,8 +145,8 @@ npm run build      # typecheck and build to dist/
 - `src/getaway/drive.ts`, `src/getaway/audio.ts`, `src/getaway/main.ts`:
   getaway rules and tuning, sounds, and map screen
 - `src/story/act1.ink`, `src/story/act2.ink`, `src/story/act3.ink`: the
-  scripts; `src/story/beats.ts` turns Ink lines into comic beats; `src/story/art.ts` holds placeholder art;
-  `src/story/player.ts` is the comic player, started by `act1-main.ts`,
+  scripts; `src/story/beats.ts` turns Ink lines into comic beats;
+  `src/story/art/` holds the art; `src/story/player.ts` is the comic player, started by `act1-main.ts`,
   `act2-main.ts` and `act3-main.ts`; `src/story/saves.ts` reads saves across
   acts and keeps the endings found
 - `src/menu.ts`: the front page's progress

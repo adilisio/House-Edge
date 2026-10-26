@@ -28,6 +28,7 @@ const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelect
 
 const screens = { title: $("#title"), play: $("#play"), end: $("#end") };
 const comic = $("#comic");
+const backdropEl = $("#backdrop");
 const placeEl = $("#place");
 const castEl = $("#cast");
 const cardEl = $("#card-text");
@@ -61,30 +62,35 @@ function save(done = false): void {
 
 // ---- Drawing ------------------------------------------------------------
 
+/** What's drawn now, so a line that keeps the scene doesn't redraw it. */
+let drawn = { panel: "", cast: "" };
+
 function render(): void {
-  const place = PLACES[view.panel] ?? PLACES["city-map"];
-  comic.style.background = `linear-gradient(${place.sky} 0 62%, ${place.ground} 62% 100%)`;
-  placeEl.textContent = place.label;
+  const panel = PLACES[view.panel] ? view.panel : "city-map";
+  if (panel !== drawn.panel) {
+    // The art is our own markup, never story text.
+    backdropEl.innerHTML = `<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">${PLACES[panel].svg}</svg>`;
+    placeEl.textContent = PLACES[panel].label;
+  }
   comic.classList.toggle("frozen", view.frozen);
 
-  castEl.replaceChildren(
-    ...view.cast.map((name) => {
-      const c = CHARACTERS[name];
-      const fig = document.createElement("div");
-      fig.className = "figure";
-      const head = document.createElement("div");
-      head.className = "head";
-      head.style.background = c?.head ?? "#999";
-      const body = document.createElement("div");
-      body.className = "body";
-      body.style.background = c?.color ?? "#666";
-      const label = document.createElement("div");
-      label.className = "name";
-      label.textContent = name;
-      fig.append(head, body, label);
-      return fig;
-    }),
-  );
+  const cast = view.cast.join(",");
+  if (cast !== drawn.cast) {
+    castEl.dataset.count = String(view.cast.length);
+    castEl.replaceChildren(
+      ...view.cast.map((name) => {
+        const fig = document.createElement("div");
+        fig.className = "figure";
+        fig.innerHTML = `<svg viewBox="0 0 120 182" aria-hidden="true">${CHARACTERS[name]?.svg ?? ""}</svg>`;
+        const label = document.createElement("div");
+        label.className = "name";
+        label.textContent = name;
+        fig.append(label);
+        return fig;
+      }),
+    );
+  }
+  drawn = { panel, cast };
 
   cardEl.hidden = view.card === null;
   cardEl.textContent = view.card ?? "";

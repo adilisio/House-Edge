@@ -1,4 +1,4 @@
-/* Act one comic player, on top of the shared comic style. */
+/* The story's comic player, on top of the shared comic style. */
 .title-actions {
   display: flex;
   flex-wrap: wrap;
@@ -13,7 +13,16 @@
   box-shadow: 6px 6px 0 var(--ink);
   overflow: hidden;
   cursor: pointer;
+  background: var(--night);
   transition: filter 0.4s;
+}
+
+.backdrop,
+.backdrop svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* Halftone dots over every backdrop. */
@@ -57,8 +66,19 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 6%;
-  padding: 0 8%;
+  gap: 2%;
+  padding: 0 6%;
+}
+
+/* A full crew stands shoulder to shoulder. */
+.cast[data-count="4"],
+.cast[data-count="5"] {
+  gap: 0;
+  padding: 0 2%;
+}
+
+.cast[data-count="5"] .figure {
+  margin: 0 -2.5%;
 }
 
 .figure {
@@ -66,9 +86,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 0 1 24%;
+  flex: 0 1 30%;
   min-width: 0;
-  max-width: 120px;
+  max-width: 150px;
   animation: pop-in 0.25s ease-out;
 }
 
@@ -79,19 +99,9 @@
   }
 }
 
-.figure .head {
-  width: 46%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 3px solid var(--ink);
-}
-
-.figure .body {
+.figure svg {
+  display: block;
   width: 100%;
-  aspect-ratio: 1 / 1.1;
-  margin-top: -4px;
-  border: 3px solid var(--ink);
-  border-radius: 40% 40% 0 0;
 }
 
 .figure .name {
