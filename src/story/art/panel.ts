@@ -15,8 +15,15 @@ export function drawBackdrop(el: HTMLElement, place: string): void {
 
 export function drawCast(el: HTMLElement, names: string[], moods: Record<string, Mood> = {}): void {
   el.dataset.count = String(names.length);
+  // Whoever is already in the panel stays put; only newcomers pop in.
+  const shown = new Map([...el.querySelectorAll<HTMLElement>(":scope > .figure")].map((f) => [f.dataset.name, f]));
   el.replaceChildren(
     ...names.map((name) => {
+      const kept = shown.get(name);
+      if (kept) {
+        kept.classList.add("settled");
+        return kept;
+      }
       const fig = document.createElement("div");
       fig.className = "figure";
       fig.dataset.name = name;
@@ -29,6 +36,7 @@ export function drawCast(el: HTMLElement, names: string[], moods: Record<string,
       return fig;
     }),
   );
+  setMoods(el, moods);
 }
 
 /** Change the faces of the cast already drawn, without the figures popping in again. */

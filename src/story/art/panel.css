@@ -87,6 +87,11 @@
   animation: pop-in 0.25s ease-out;
 }
 
+/* Moved, not new: no second pop-in. */
+.figure.settled {
+  animation: none;
+}
+
 @keyframes pop-in {
   from {
     transform: translateY(12px);

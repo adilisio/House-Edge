@@ -23,6 +23,11 @@ office window. The choices set flags for act two (see the top of `act1.ink`).
 
 Lines are shown as comic beats: `NAME: text` is a speech bubble and anything else a
 caption, while tags set the panel's place and cast, title cards and freeze-frames.
+`# mood: Theo worried, Sam happy` changes faces: every character can look neutral,
+happy, angry, worried, shocked or sad, and a face holds until it's changed or the
+panel moves somewhere new. The playthrough tests reject a mood for anyone who isn't
+in the panel.
+
 The art is flat comic-style vector drawn in code, with no image files: a backdrop
 for each of the 18 places (`src/story/art/places.ts`) and a waist-up figure for
 each of the 11 characters (`src/story/art/cast.ts`), sharing the helpers in
@@ -30,6 +35,11 @@ each of the 11 characters (`src/story/art/cast.ts`), sharing the helpers in
 redrawn without touching the story. `src/story/art/panel.ts` puts it on the page,
 for the player and for the cover panels on the title and end screens (and on the
 hands-on scenes' intros when they're played on their own).
+
+The story has synthesised sound too (`src/story/audio.ts`): room tone and the odd
+sound that belongs to each place, crossfaded as the panel moves, and stings for
+title cards, freeze-frames and choices. It goes quiet while a hands-on scene plays,
+and the Sound switch under the panel is remembered.
 
 Progress saves in the browser after every line, with a Continue button on the
 title screen. Each save records which version of the script it was made with. If
@@ -152,7 +162,8 @@ npm run build      # typecheck and build to dist/
   getaway rules and tuning, sounds, and map screen
 - `src/story/act1.ink`, `src/story/act2.ink`, `src/story/act3.ink`: the
   scripts; `src/story/beats.ts` turns Ink lines into comic beats;
-  `src/story/art/` holds the art; `src/story/player.ts` is the comic player,
+  `src/story/art/` holds the art and `src/story/audio.ts` the sound;
+  `src/story/player.ts` is the comic player,
   started by `act1-main.ts`, `act2-main.ts` and `act3-main.ts`;
   `src/story/saves.ts` stores saves and the endings found, and
   `src/story/carry.ts` reads one act's choices for the next
