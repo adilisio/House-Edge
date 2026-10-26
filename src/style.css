@@ -311,13 +311,21 @@ button:focus-visible,
   gap: 14px;
 }
 
-/* Front-page menu. */
+/* Front-page menu, and links that look like buttons. */
 .menu {
   display: grid;
   gap: 8px;
 }
 
-.menu a {
+a.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+}
+
+.menu a,
+a.button {
   color: var(--ink);
   font-weight: 700;
   border: 3px solid var(--ink);
@@ -327,7 +335,8 @@ button:focus-visible,
   box-shadow: 3px 3px 0 var(--ink);
 }
 
-.menu a.big-link {
+.menu a.big-link,
+a.button.big-link {
   font-family: Bangers, Impact, sans-serif;
   font-weight: 400;
   font-size: 24px;
@@ -336,7 +345,8 @@ button:focus-visible,
   color: #fff;
 }
 
-.menu a:focus-visible {
+.menu a:focus-visible,
+a.button:focus-visible {
   outline: 3px solid var(--teal);
   outline-offset: 3px;
 }

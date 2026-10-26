@@ -19,7 +19,7 @@
         </p>
         <p class="hint" id="carry"></p>
         <fieldset class="setup" id="setup" hidden>
-          <label class="toggle">
+          <label class="toggle" id="leak-pick">
             What Sam told Kessler:
             <select id="leak">
               <option value="date">The gala date</option>
@@ -58,7 +58,12 @@
         <p class="caption">Your ending</p>
         <h1 id="ending"></h1>
         <p>Play again to find the other endings, and the clues you missed.</p>
-        <button id="again">Play heist night again</button>
+        <p class="hint" id="found"></p>
+        <ul class="summary" id="endings"></ul>
+        <div class="title-actions">
+          <button id="again">Play heist night again</button>
+          <a class="button" href="./">Menu</a>
+        </div>
       </section>
     </main>
     <script type="module" src="/src/story/act3-main.ts"></script>
