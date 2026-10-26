@@ -8,6 +8,10 @@
 //   # freeze          freeze-frame on this line
 //   # minigame: <s>   after this line, play hands-on scene <s>; its outcome
 //                     lands in the Ink variable <s>_result (act three)
+//   # mood: A happy, B worried
+//                     change faces: neutral, happy, angry, worried, shocked
+//                     or sad. A face holds until it's changed again or the
+//                     panel moves somewhere new.
 //
 // Flags set here carry into act two.
 

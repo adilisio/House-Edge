@@ -1,8 +1,7 @@
 import { Story } from "inkjs";
 import { describe, expect, it } from "vitest";
 import act2 from "./act2.ink";
-import { CHARACTERS, PLACES } from "./art";
-import { parseLine } from "./beats";
+import { stagingChecker } from "./staging-check";
 
 type Chooser = (texts: string[]) => number;
 
@@ -125,16 +124,12 @@ describe("act two", () => {
     expect(lines.some((l) => l.includes(words))).toBe(true);
   });
 
-  it("only uses panels, cast and speakers the player knows how to draw", () => {
+  it("only uses panels, cast, speakers and moods the player knows how to draw", () => {
     for (let run = 0; run < 30; run++) {
       const story = new Story(act2);
+      const check = stagingChecker();
       for (let guard = 0; guard < 1000; guard++) {
-        while (story.canContinue) {
-          const { beat, staging } = parseLine(story.Continue() ?? "", story.currentTags ?? []);
-          if (staging.panel) expect(PLACES, staging.panel).toHaveProperty([staging.panel]);
-          for (const name of staging.cast ?? []) expect(CHARACTERS, name).toHaveProperty([name]);
-          if (beat.kind === "speech") expect(CHARACTERS, beat.speaker).toHaveProperty([beat.speaker]);
-        }
+        while (story.canContinue) check(story.Continue() ?? "", story.currentTags ?? []);
         if (!story.currentChoices.length) break;
         story.ChooseChoiceIndex(Math.floor(Math.random() * story.currentChoices.length));
       }

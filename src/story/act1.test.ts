@@ -2,6 +2,7 @@ import { Story } from "inkjs";
 import { describe, expect, it } from "vitest";
 import act1 from "./act1.ink";
 import { parseLine } from "./beats";
+import { stagingChecker } from "./staging-check";
 
 /** Play act one to the end, picking choices with `pick`. */
 function playthrough(pick: (count: number) => number): Story {
@@ -64,17 +65,12 @@ describe("act one", () => {
     expect(texts()).toEqual(RECRUITS.slice(1));
   });
 
-  it("only uses panels, cast and speakers the player knows how to draw", async () => {
-    const { PLACES, CHARACTERS } = await import("./art");
+  it("only uses panels, cast, speakers and moods the player knows how to draw", () => {
     for (let run = 0; run < 20; run++) {
       const story = new Story(act1);
+      const check = stagingChecker();
       for (let guard = 0; guard < 500; guard++) {
-        while (story.canContinue) {
-          const { beat, staging } = parseLine(story.Continue() ?? "", story.currentTags ?? []);
-          if (staging.panel) expect(PLACES, staging.panel).toHaveProperty(staging.panel);
-          for (const name of staging.cast ?? []) expect(CHARACTERS, name).toHaveProperty(name);
-          if (beat.kind === "speech") expect(CHARACTERS, beat.speaker).toHaveProperty(beat.speaker);
-        }
+        while (story.canContinue) check(story.Continue() ?? "", story.currentTags ?? []);
         if (!story.currentChoices.length) break;
         story.ChooseChoiceIndex(Math.floor(Math.random() * story.currentChoices.length));
       }
@@ -95,5 +91,14 @@ describe("parseLine", () => {
       freeze: true,
     });
     expect(parseLine("Under the glass: a chip.", []).beat.kind).toBe("caption");
+  });
+
+  it("reads faces from mood tags, names of any length first", () => {
+    expect(parseLine("Huh.", ["mood: Theo worried, High Roller angry"]).staging.moods).toEqual({
+      Theo: "worried",
+      "High Roller": "angry",
+    });
+    // An entry without a known mood is left out.
+    expect(parseLine("Huh.", ["mood: Sam furious, Dee happy"]).staging.moods).toEqual({ Dee: "happy" });
   });
 });

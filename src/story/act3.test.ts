@@ -1,8 +1,8 @@
 import { Story } from "inkjs";
 import { describe, expect, it } from "vitest";
 import act3 from "./act3.ink";
-import { CHARACTERS, PLACES } from "./art";
 import { parseLine } from "./beats";
+import { stagingChecker } from "./staging-check";
 
 interface Setup {
   theo_safe?: boolean;
@@ -97,18 +97,16 @@ describe("act three", () => {
     expect(costly.some((l) => l.includes("three seconds that jump"))).toBe(true);
   });
 
-  it("only uses panels, cast and speakers the player knows how to draw", () => {
+  it("only uses panels, cast, speakers and moods the player knows how to draw", () => {
     const pick = <T,>(xs: readonly T[]) => xs[Math.floor(Math.random() * xs.length)];
     for (let run = 0; run < 40; run++) {
       const story = new Story(act3);
       for (const k of ["theo_safe", "vince_handled", "dee_won"]) story.variablesState.$(k, Math.random() < 0.5);
       story.variablesState.$("leaked", pick(["date", "vault", "crew"]));
+      const check = stagingChecker();
       for (let guard = 0; guard < 1000; guard++) {
         while (story.canContinue) {
-          const { beat, staging } = parseLine(story.Continue() ?? "", story.currentTags ?? []);
-          if (staging.panel) expect(PLACES, staging.panel).toHaveProperty([staging.panel]);
-          for (const name of staging.cast ?? []) expect(CHARACTERS, name).toHaveProperty([name]);
-          if (beat.kind === "speech") expect(CHARACTERS, beat.speaker).toHaveProperty([beat.speaker]);
+          const { staging } = check(story.Continue() ?? "", story.currentTags ?? []);
           if (staging.minigame) {
             const scene = staging.minigame as keyof typeof OUTCOMES;
             story.variablesState.$(`${scene}_result`, pick(OUTCOMES[scene]));

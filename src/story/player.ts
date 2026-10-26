@@ -6,7 +6,8 @@ import "../style.css";
 import "./story.css";
 import { Story } from "inkjs";
 import { PLACES } from "./art";
-import { drawBackdrop, drawCast, drawCovers, placeOrDefault } from "./art/panel";
+import type { Mood } from "./art/cast";
+import { drawBackdrop, drawCast, drawCovers, placeOrDefault, setMoods } from "./art/panel";
 import type { SceneResult } from "../embed";
 import { parseLine, type Beat } from "./beats";
 import { loadSave, storyVersion, writeSave, type Save } from "./saves";
@@ -49,6 +50,8 @@ interface View {
   card: string | null;
   /** A hands-on scene waiting to be played before the story goes on. */
   pending?: string | null;
+  /** Faces set by mood tags; they hold until changed or the panel moves on. */
+  moods?: Record<string, Mood>;
 }
 
 let act: ActOptions;
@@ -76,7 +79,8 @@ function render(): void {
   comic.classList.toggle("frozen", view.frozen);
 
   const cast = view.cast.join(",");
-  if (cast !== drawn.cast) drawCast(castEl, view.cast);
+  if (cast !== drawn.cast) drawCast(castEl, view.cast, view.moods);
+  else setMoods(castEl, view.moods ?? {});
   drawn = { panel, cast };
 
   cardEl.hidden = view.card === null;
@@ -130,7 +134,9 @@ function step(): void {
     if (staging.panel && staging.panel !== view.panel) {
       view.panel = staging.panel;
       view.beats = [];
+      view.moods = {};
     }
+    if (staging.moods) view.moods = { ...view.moods, ...staging.moods };
     if (staging.cast) view.cast = staging.cast;
     if (beat.kind === "card") {
       view.card = beat.text;

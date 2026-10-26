@@ -3,5 +3,5 @@
 // any of these can be redrawn, or swapped for an image, without touching the
 // story.
 
-export { CHARACTERS, type Character } from "./cast";
+export { CHARACTERS, MOODS, figureSvg, isMood, parseMoods, type Character, type Mood } from "./cast";
 export { PLACES, type Place } from "./places";

@@ -3,7 +3,7 @@ import "./poker.css";
 import { scouted, wireEndButton } from "../embed";
 import { drawCovers } from "../story/art/panel";
 import { PokerAudio } from "./audio";
-import { CHARACTERS } from "../story/art";
+import { figureSvg } from "../story/art";
 import { DEFAULT_TABLE, Table, type Move, type PokerOutcome, type TableEvent } from "./table";
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
@@ -93,7 +93,7 @@ roller.innerHTML = `
   <ellipse class="gold ink" cx="56" cy="182" rx="20" ry="7"/>
   <ellipse class="gold ink" cx="56" cy="174" rx="20" ry="7"/>
   <rect class="inset ink" x="222" y="12" width="68" height="94"/>
-  <svg x="224" y="14" width="64" height="76" viewBox="0 0 120 182" preserveAspectRatio="xMidYMax meet">${CHARACTERS.Vince.svg}</svg>
+  <svg x="224" y="14" width="64" height="76" viewBox="0 0 120 182" preserveAspectRatio="xMidYMax meet">${figureSvg("Vince")}</svg>
   <text class="label" x="256" y="102" text-anchor="middle">VINCE</text>
   <text class="freeze" id="freeze" x="256" y="27" text-anchor="middle" visibility="hidden">FREEZE!</text>
 `;
