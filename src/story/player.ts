@@ -1,9 +1,22 @@
+// The comic player shared by every act: draws the panel, captions and
+// speech bubbles, offers choices, and saves progress in the browser. Each
+// act's page supplies its story and what happens at the start and the end.
+
 import "../style.css";
 import "./story.css";
 import { Story } from "inkjs";
-import act1 from "./act1.ink";
 import { CHARACTERS, PLACES } from "./art";
 import { parseLine, type Beat } from "./beats";
+
+export interface ActOptions {
+  /** Compiled Ink JSON for this act. */
+  json: string;
+  saveKey: string;
+  /** Called on a fresh start, before the first line: copy flags in here. */
+  prepare?: (story: Story) => void;
+  /** Called when the act's story ends, before the end screen shows. */
+  onEnd?: (story: Story) => void;
+}
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
 
@@ -17,7 +30,6 @@ const choicesEl = $("#choices");
 const nextBtn = $<HTMLButtonElement>("#next");
 const continueBtn = $<HTMLButtonElement>("#continue");
 
-const SAVE_KEY = "house-edge-act1";
 /** Beats kept on screen under the panel; older ones scroll away. */
 const MAX_BEATS = 3;
 
@@ -29,6 +41,7 @@ interface View {
   card: string | null;
 }
 
+let act: ActOptions;
 let story: Story;
 let view: View;
 
@@ -37,15 +50,16 @@ let view: View;
 
 function save(): void {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ state: story.state.ToJson(), view }));
+    localStorage.setItem(act.saveKey, JSON.stringify({ state: story.state.ToJson(), view }));
   } catch {
     // Not saved this time.
   }
 }
 
-function load(): { state: string; view: View } | null {
+/** Read any act's save; the act two page also reads act one's flags this way. */
+export function loadSave(saveKey: string): { state: string; view: View } | null {
   try {
-    const raw = localStorage.getItem(SAVE_KEY);
+    const raw = localStorage.getItem(saveKey);
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
@@ -148,6 +162,11 @@ function step(): void {
     return;
   }
   if (story.currentChoices.length) return showChoices();
+  finish();
+}
+
+function finish(): void {
+  act.onEnd?.(story);
   show("end");
 }
 
@@ -169,25 +188,31 @@ function show(name: keyof typeof screens): void {
 }
 
 function start(saved: { state: string; view: View } | null): void {
-  story = new Story(act1);
+  story = new Story(act.json);
   view = { panel: "casino-exterior", cast: [], beats: [], frozen: false, card: null };
   if (saved) {
     story.state.LoadJson(saved.state);
     view = saved.view;
+  } else {
+    act.prepare?.(story);
   }
   show("play");
   render();
   if (saved) {
     // Pick up exactly where the save left off.
     if (!story.canContinue && story.currentChoices.length) showChoices();
-    else if (!story.canContinue) show("end");
+    else if (!story.canContinue) finish();
     else nextBtn.hidden = false;
   } else {
     step();
   }
 }
 
-continueBtn.hidden = !load();
-continueBtn.addEventListener("click", () => start(load()));
-$("#new").addEventListener("click", () => start(null));
-$("#again").addEventListener("click", () => start(null));
+/** Wire up the page's title and end screens for one act. */
+export function runAct(options: ActOptions): void {
+  act = options;
+  continueBtn.hidden = !loadSave(act.saveKey);
+  continueBtn.addEventListener("click", () => start(loadSave(act.saveKey)));
+  $("#new").addEventListener("click", () => start(null));
+  $("#again").addEventListener("click", () => start(null));
+}

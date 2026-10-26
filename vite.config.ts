@@ -34,6 +34,7 @@ export default defineConfig({
         cameras: resolve(import.meta.dirname, "cameras.html"),
         getaway: resolve(import.meta.dirname, "getaway.html"),
         act1: resolve(import.meta.dirname, "act1.html"),
+        act2: resolve(import.meta.dirname, "act2.html"),
       },
     },
   },

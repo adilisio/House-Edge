@@ -26,6 +26,14 @@ export const PLACES: Record<string, Place> = {
   gallery: { label: "The Varga Gallery", sky: "#f1ece2", ground: "#b8c0cc" },
   "street-night": { label: "On the way to the motel", sky: "#0d1b2a", ground: "#415a77" },
   "crane-window": { label: "Crane's office", sky: "#111111", ground: "#f2b705" },
+  hideout: { label: "The garage on Pier Street", sky: "#5c4b51", ground: "#8c7b6b" },
+  "office-hall": { label: "Outside Crane's office", sky: "#3a0f16", ground: "#7a1f2b" },
+  rooftop: { label: "The hideout roof", sky: "#14213d", ground: "#3d405b" },
+  bar: { label: "The Blue Lantern", sky: "#003049", ground: "#669bbc" },
+  "dee-car": { label: "Dee's car", sky: "#1d3557", ground: "#457b9d" },
+  "high-limit": { label: "The high-limit room", sky: "#2d6a4f", ground: "#d4a373" },
+  corridor: { label: "A service corridor", sky: "#2f3e46", ground: "#52796f" },
+  "vault-floor": { label: "The vault floor", sky: "#495057", ground: "#adb5bd" },
 };
 
 export const CHARACTERS: Record<string, Character> = {
@@ -39,4 +47,5 @@ export const CHARACTERS: Record<string, Character> = {
   Guard: { color: "#343a40", head: "#6c757d" },
   Buyer: { color: "#adb5bd", head: "#6c757d" },
   Waiter: { color: "#f8f9fa", head: "#6c757d" },
+  "High Roller": { color: "#ffffff", head: "#d4a373" },
 };

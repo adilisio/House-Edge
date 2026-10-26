@@ -1,7 +1,7 @@
 # House Edge
 
-A story-driven heist game for the browser. This repo holds act one of the story
-(`act1.html`, the free demo) and prototypes of all four heist-night hands-on moments: cracking Crane's vault by
+A story-driven heist game for the browser. This repo holds acts one and two of
+the story (`act1.html`, the free demo, and `act2.html`) and prototypes of all four heist-night hands-on moments: cracking Crane's vault by
 ear (`index.html`), keeping a high roller's eyes off Vince (`poker.html`),
 splicing Theo's camera loops (`cameras.html`), and navigating Dee's getaway
 (`getaway.html`).
@@ -20,6 +20,20 @@ caption, while tags set the panel's place and cast, title cards and freeze-frame
 The art is placeholder (coloured backdrops and silhouettes in `src/story/art.ts`).
 Progress saves in the browser after every line, with a Continue button on the
 title screen.
+
+## Act two
+
+`src/story/act2.ink`: three days to the gala. Each day opens with one of Crane's
+moves, the consequences of Sam's leak, and the third depends on what Sam told
+Kessler. Then the player spends the day's slots, seven in all: each crew secret
+(Theo, Vince, Dee) takes a clue scene and a response scene, and four scouting
+scenes compete for the same time. Leo's office scene is fixed on the evening of
+day one. The responses set heist night's three checks (`theo_safe`,
+`vince_handled`, `dee_won`), which the end screen summarises for now.
+
+Act two reads act one's flags from this browser's act one save. Without one, its
+title screen asks what Sam told Kessler. Both acts share the comic player in
+`src/story/player.ts`.
 
 ## Vault prototype
 
@@ -86,7 +100,7 @@ Keys: ← ↑ → for the calls.
 ```sh
 npm install
 npm run dev        # local dev server
-npm test           # rule tests for the four scenes, plus act one playthroughs
+npm test           # rule tests for the four scenes, plus story playthroughs
 npm run build      # typecheck and build to dist/
 ```
 
@@ -98,8 +112,9 @@ npm run build      # typecheck and build to dist/
   loop rules and tuning, sounds, and screen
 - `src/getaway/drive.ts`, `src/getaway/audio.ts`, `src/getaway/main.ts`:
   getaway rules and tuning, sounds, and map screen
-- `src/story/act1.ink`: act one script; `src/story/beats.ts` turns Ink lines
-  into comic beats; `src/story/art.ts` holds placeholder art; `src/story/main.ts`
-  is the player
+- `src/story/act1.ink`, `src/story/act2.ink`: the scripts; `src/story/beats.ts`
+  turns Ink lines into comic beats; `src/story/art.ts` holds placeholder art;
+  `src/story/player.ts` is the comic player, started by `act1-main.ts` and
+  `act2-main.ts`
 - `src/synth.ts`: shared Web Audio helpers
 - `src/style.css`: shared comic-book styling
