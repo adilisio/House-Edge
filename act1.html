@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>House Edge Act One</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <main id="app">
+      <section id="title" class="screen panel">
+        <h1>House Edge</h1>
+        <p class="caption">Act one</p>
+        <p>
+          Five years ago, Victor Crane framed you and took everything. Now you're back in his
+          town, and you need a crew.
+        </p>
+        <p class="hint">Placeholder art. About 10 minutes.</p>
+        <div class="title-actions">
+          <button id="continue" class="big" hidden>Continue</button>
+          <button id="new" class="big">New game</button>
+        </div>
+      </section>
+
+      <section id="play" class="screen" hidden>
+        <div class="comic" id="comic">
+          <div class="place" id="place"></div>
+          <div class="cast" id="cast"></div>
+          <div class="card-text" id="card-text" hidden></div>
+        </div>
+        <div class="beats" id="beats" aria-live="polite"></div>
+        <div class="choices" id="choices"></div>
+        <button id="next" class="big next">Next</button>
+        <p class="hint">Tap the panel, Space or Enter to continue</p>
+      </section>
+
+      <section id="end" class="screen panel" hidden>
+        <h1>To be continued</h1>
+        <p class="caption">Act two</p>
+        <p>
+          Three weeks to the gala. Everyone on your crew is hiding something, and Crane seems to
+          know your every move. So does someone else.
+        </p>
+        <button class="big" disabled>Full game coming soon</button>
+        <p class="hint">Your choices are saved in this browser for the full game.</p>
+        <button id="again">Play act one again</button>
+      </section>
+    </main>
+    <script type="module" src="/src/story/main.ts"></script>
+  </body>
+</html>

@@ -1,10 +1,25 @@
 # House Edge
 
-A story-driven heist game for the browser. This repo currently holds
-prototypes of all four heist-night hands-on moments: cracking Crane's vault by
+A story-driven heist game for the browser. This repo holds act one of the story
+(`act1.html`, the free demo) and prototypes of all four heist-night hands-on moments: cracking Crane's vault by
 ear (`index.html`), keeping a high roller's eyes off Vince (`poker.html`),
 splicing Theo's camera loops (`cameras.html`), and navigating Dee's getaway
 (`getaway.html`).
+
+## Act one
+
+The free demo, written in [Ink](https://www.inklestudios.com/ink/) in
+`src/story/act1.ink` and compiled at build time by a small plugin in
+`vite.config.ts`. It opens on the mid-heist flash-forward, then cuts to three weeks
+earlier: Sam Hale recruits Theo, Leo, Dee and Vince in any order, is stopped by
+Detective Kessler after the second recruit, and ends on Crane's welcome from his
+office window. The choices set flags for act two (see the top of `act1.ink`).
+
+Lines are shown as comic beats: `NAME: text` is a speech bubble and anything else a
+caption, while tags set the panel's place and cast, title cards and freeze-frames.
+The art is placeholder (coloured backdrops and silhouettes in `src/story/art.ts`).
+Progress saves in the browser after every line, with a Continue button on the
+title screen.
 
 ## Vault prototype
 
@@ -71,7 +86,7 @@ Keys: ← ↑ → for the calls.
 ```sh
 npm install
 npm run dev        # local dev server
-npm test           # rule tests for all four scenes
+npm test           # rule tests for the four scenes, plus act one playthroughs
 npm run build      # typecheck and build to dist/
 ```
 
@@ -83,5 +98,8 @@ npm run build      # typecheck and build to dist/
   loop rules and tuning, sounds, and screen
 - `src/getaway/drive.ts`, `src/getaway/audio.ts`, `src/getaway/main.ts`:
   getaway rules and tuning, sounds, and map screen
+- `src/story/act1.ink`: act one script; `src/story/beats.ts` turns Ink lines
+  into comic beats; `src/story/art.ts` holds placeholder art; `src/story/main.ts`
+  is the player
 - `src/synth.ts`: shared Web Audio helpers
 - `src/style.css`: shared comic-book styling
