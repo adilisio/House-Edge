@@ -9,6 +9,8 @@ export interface Save {
   view: unknown;
   /** Set once the act has been played to its end screen. */
   done?: boolean;
+  /** storyVersion() of the script the save was made with. */
+  version?: string;
 }
 
 export const SAVE_KEYS = { act1: "house-edge-act1", act2: "house-edge-act2", act3: "house-edge-act3" } as const;
@@ -21,6 +23,19 @@ export const ENDINGS: Record<string, string> = {
   betrayed: "Betrayed",
   theo: "Protecting Theo",
 };
+
+/**
+ * A short fingerprint of a compiled story. A save made with a different
+ * version can't be resumed safely: Ink would pick up at a stale position.
+ */
+export function storyVersion(json: string): string {
+  let hash = 0x811c9dc5; // FNV-1a
+  for (let i = 0; i < json.length; i++) {
+    hash ^= json.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(36);
+}
 
 export function loadSave(saveKey: string): Save | null {
   try {
@@ -41,13 +56,15 @@ export function writeSave(saveKey: string, save: Save): void {
 
 /**
  * The named flags from a saved story, but only if it was played to the end:
- * an act abandoned halfway hasn't made its choices yet.
+ * an act abandoned halfway hasn't made its choices yet. A save marked done
+ * counts even when the script has changed since, which can leave its
+ * position meaningless; variables are kept by name, so they still read.
  */
-export function finishedFlags(json: string, state: string, names: readonly string[]): Record<string, unknown> | null {
+export function finishedFlags(json: string, state: string, names: readonly string[], done = false): Record<string, unknown> | null {
   try {
     const story = new Story(json);
     story.state.LoadJson(state);
-    if (story.canContinue || story.currentChoices.length) return null;
+    if (!done && (story.canContinue || story.currentChoices.length)) return null;
     return Object.fromEntries(names.map((name) => [name, story.variablesState.$(name)]));
   } catch {
     return null;
@@ -57,7 +74,7 @@ export function finishedFlags(json: string, state: string, names: readonly strin
 /** finishedFlags for this browser's save of an act. */
 export function savedFlags(json: string, saveKey: string, names: readonly string[]): Record<string, unknown> | null {
   const save = loadSave(saveKey);
-  return save ? finishedFlags(json, save.state, names) : null;
+  return save ? finishedFlags(json, save.state, names, save.done) : null;
 }
 
 /** Endings reached in this browser, in any order. */

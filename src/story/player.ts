@@ -9,7 +9,7 @@ import { PLACES } from "./art";
 import { drawBackdrop, drawCast, drawCovers, placeOrDefault } from "./art/panel";
 import type { SceneResult } from "../embed";
 import { parseLine, type Beat } from "./beats";
-import { loadSave, writeSave, type Save } from "./saves";
+import { loadSave, storyVersion, writeSave, type Save } from "./saves";
 
 export interface ActOptions {
   /** Compiled Ink JSON for this act. */
@@ -52,13 +52,14 @@ interface View {
 }
 
 let act: ActOptions;
+let version = "";
 let story: Story;
 let view: View;
 
 // ---- Saving -------------------------------------------------------------
 
 function save(done = false): void {
-  writeSave(act.saveKey, { state: story.state.ToJson(), view, done });
+  writeSave(act.saveKey, { state: story.state.ToJson(), view, done, version });
 }
 
 // ---- Drawing ------------------------------------------------------------
@@ -234,9 +235,22 @@ function start(saved: Save | null): void {
 /** Wire up the page's title and end screens for one act. */
 export function runAct(options: ActOptions): void {
   act = options;
+  version = storyVersion(act.json);
   drawCovers();
-  continueBtn.hidden = !loadSave(act.saveKey);
-  continueBtn.addEventListener("click", () => start(loadSave(act.saveKey)));
+  const saved = loadSave(act.saveKey);
+  const resumable = () => {
+    const save = loadSave(act.saveKey);
+    return save?.version === version ? save : null;
+  };
+  continueBtn.hidden = !resumable();
+  if (saved && !saved.done && !resumable()) {
+    // Played halfway on an older version of the story.
+    const note = document.createElement("p");
+    note.className = "hint";
+    note.textContent = "The story has been updated since you last played, so this act starts over. Choices from acts you finished still carry over.";
+    continueBtn.parentElement!.before(note);
+  }
+  continueBtn.addEventListener("click", () => start(resumable()));
   $("#new").addEventListener("click", () => start(null));
   $("#again").addEventListener("click", () => start(null));
 }
