@@ -185,22 +185,25 @@ export const CHARACTERS: Record<string, Character> = {
       ${nose}
       ${mouth("M54 70 h12")}`,
   },
+  // Matches the close-up in the poker scene: white dinner jacket, black
+  // shirt, gold chain, cigar, and eyes you can watch wander.
   "High Roller": {
     svg: `
-      ${shoulders("#ffffff")}
+      ${shoulders("#f8f9fa")}
       ${path("M46 98 L60 128 L74 98 Z", "#1d1d1d")}
       <path d="M48 100 Q60 124 72 100" ${stroke(3, "#f2b705")}/>
       ${circle(60, 120, 4, "#f2b705", 1.5)}
       ${lapels("#e9ecef")}
       ${path("M84 130 l8 -6 l4 4 l-6 6 Z", "#e63946", 1.5)}
-      ${neck("#d4a373")}
-      ${head("#d4a373", 22, 25)}
+      ${neck("#e9b48a")}
+      ${head("#e9b48a", 22, 25)}
       ${jaw(0.12)}
-      ${path("M38 56 Q36 28 60 28 Q84 28 82 56 L78 56 Q78 40 60 38 Q42 40 42 56 Z", "#6f4518")}
-      ${path("M42 50 H58 V58 Q50 62 42 58 Z M62 50 H78 V58 Q70 62 62 58 Z", INK, 2)}
-      <path d="M58 52 h4" ${stroke(3)}/>
+      ${path("M38 54 Q36 28 60 28 Q84 28 82 54 Q78 40 60 39 Q42 40 38 54 Z", INK)}
+      <ellipse cx="52" cy="54" rx="5" ry="3.5" fill="#fff" ${ink(2)}/><ellipse cx="68" cy="54" rx="5" ry="3.5" fill="#fff" ${ink(2)}/>
+      ${eyes(54)}
+      ${brows("M45 48 l12 -1 M63 47 l12 1")}
       ${nose}
       ${mouth("M50 70 q10 4 20 0")}
-      ${path("M68 70 l16 2 v4 l-16 -2 Z", "#8b5e34", 1.5)}${circle(85, 74, 2.5, "#e63946", 1)}`,
+      ${path("M68 70 l16 -3 v4 l-16 3 Z", "#7a4a2a", 1.5)}${circle(85, 69, 2.5, "#e63946", 1)}`,
   },
 };
