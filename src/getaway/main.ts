@@ -1,6 +1,7 @@
 import "../style.css";
 import "./getaway.css";
 import { scouted, wireEndButton } from "../embed";
+import { drawCovers } from "../story/art/panel";
 import { GetawayAudio } from "./audio";
 import {
   DEFAULT_DRIVE,
@@ -17,6 +18,8 @@ import {
 } from "./drive";
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
+
+drawCovers();
 
 const screens = { intro: $("#intro"), play: $("#play"), end: $("#end") };
 const canvas = $<HTMLCanvasElement>("#map");

@@ -6,8 +6,8 @@ const params = new URLSearchParams(location.search);
 
 export const embedded = params.get("embed") === "1" && window.parent !== window;
 // Inside the story, the scene's own way back to the menu would strand the
-// player in the frame, so it goes.
-if (embedded) for (const link of document.querySelectorAll<HTMLElement>(".menu-link")) link.hidden = true;
+// player in the frame, and its cover repeats the panel they just saw.
+if (embedded) for (const el of document.querySelectorAll<HTMLElement>(".standalone-only")) el.hidden = true;
 
 /** The player scouted this moment in act two, so it plays a little easier. */
 export const scouted = params.get("scouted") === "1";

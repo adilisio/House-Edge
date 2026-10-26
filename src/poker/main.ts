@@ -1,11 +1,14 @@
 import "../style.css";
 import "./poker.css";
 import { scouted, wireEndButton } from "../embed";
+import { drawCovers } from "../story/art/panel";
 import { PokerAudio } from "./audio";
 import { CHARACTERS } from "../story/art";
 import { DEFAULT_TABLE, Table, type Move, type PokerOutcome, type TableEvent } from "./table";
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
+
+drawCovers();
 
 const screens = { intro: $("#intro"), play: $("#play"), end: $("#end") };
 const scene = $("#scene");

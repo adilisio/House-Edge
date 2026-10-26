@@ -1,12 +1,15 @@
 import "./style.css";
 import { VaultAudio } from "./audio";
 import { scouted, wireEndButton } from "./embed";
+import { drawCovers } from "./story/art/panel";
 import { Lock, defaultConfig, randomCombination, type LockEvent, type Outcome } from "./lock";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const DEG_PER_STEP = 3.6;
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
+
+drawCovers();
 
 const screens = { intro: $("#intro"), play: $("#play"), end: $("#end") };
 const dial = $<SVGSVGElement>("#dial");

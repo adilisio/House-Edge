@@ -1,10 +1,13 @@
 import "../style.css";
 import "./cameras.css";
 import { scouted, wireEndButton } from "../embed";
+import { drawCovers } from "../story/art/panel";
 import { CameraAudio } from "./audio";
 import { CAMERAS, CameraLoop, MOTH_SECONDS, type LoopEvent, type LoopOutcome } from "./loop";
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
+
+drawCovers();
 
 const screens = { intro: $("#intro"), play: $("#play"), end: $("#end") };
 const liveCtx = $<HTMLCanvasElement>("#live").getContext("2d")!;
