@@ -85,6 +85,17 @@
   background: var(--teal);
 }
 
+button.sound-toggle {
+  align-self: center;
+  min-height: 36px;
+  padding: 2px 12px;
+  font-size: 14px;
+  color: var(--paper);
+  background: transparent;
+  border-color: var(--paper);
+  box-shadow: none;
+}
+
 button.next {
   align-self: flex-end;
   font-size: 22px;

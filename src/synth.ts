@@ -27,7 +27,12 @@ export class Synth {
   }
 
   protected later(fn: () => void, ms: number): void {
-    this.timers.push(window.setTimeout(fn, ms));
+    const id = window.setTimeout(() => {
+      // Forget timers once they've fired, so long sessions don't pile them up.
+      this.timers = this.timers.filter((t) => t !== id);
+      fn();
+    }, ms);
+    this.timers.push(id);
   }
 
   /** Looped noise through a lowpass: room tone. */
@@ -65,11 +70,18 @@ export class Synth {
     src.stop(t + dur + 0.02);
   }
 
-  protected tone(t: number, type: OscillatorType, freq: number, dur: number, gain: number): void {
+  protected tone(
+    t: number,
+    type: OscillatorType,
+    freq: number,
+    dur: number,
+    gain: number,
+    dest: AudioNode = this.master,
+  ): void {
     const osc = this.ctx.createOscillator();
     osc.type = type;
     osc.frequency.value = freq;
-    const g = this.gain(0, this.master);
+    const g = this.gain(0, dest);
     g.gain.setValueAtTime(gain, t);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     osc.connect(g);

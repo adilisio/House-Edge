@@ -7,6 +7,7 @@ import "./story.css";
 import { Story } from "inkjs";
 import { PLACES } from "./art";
 import type { Mood } from "./art/cast";
+import { StoryAudio } from "./audio";
 import { drawBackdrop, drawCast, drawCovers, placeOrDefault, setMoods } from "./art/panel";
 import type { SceneResult } from "../embed";
 import { parseLine, type Beat } from "./beats";
@@ -59,6 +60,57 @@ let version = "";
 let story: Story;
 let view: View;
 
+// ---- Sound --------------------------------------------------------------
+// Off is remembered; on is the default. The audio starts on the click that
+// starts the story, since browsers only allow sound after a gesture.
+
+const SOUND_KEY = "house-edge-sound";
+let audio: StoryAudio | null = null;
+
+function soundWanted(): boolean {
+  try {
+    return localStorage.getItem(SOUND_KEY) !== "off";
+  } catch {
+    return true;
+  }
+}
+
+function startAudio(): void {
+  if (audio || !soundWanted()) return;
+  audio = new StoryAudio();
+  void audio.start();
+}
+
+const soundBtn = document.createElement("button");
+soundBtn.className = "sound-toggle";
+
+function showSound(): void {
+  const on = soundWanted();
+  soundBtn.textContent = on ? "Sound: on" : "Sound: off";
+  soundBtn.setAttribute("aria-pressed", String(on));
+}
+
+soundBtn.addEventListener("click", () => {
+  const on = !soundWanted();
+  try {
+    localStorage.setItem(SOUND_KEY, on ? "on" : "off");
+  } catch {
+    // Remembered for this visit only.
+  }
+  if (on) {
+    startAudio();
+    if (view) audio?.setPlace(placeOrDefault(view.panel));
+  } else {
+    audio?.stop();
+    audio = null;
+  }
+  showSound();
+  // Hand Space and Enter back to the story.
+  soundBtn.blur();
+});
+
+document.addEventListener("visibilitychange", () => audio?.pause(document.hidden || overlay !== null));
+
 // ---- Saving -------------------------------------------------------------
 
 function save(done = false): void {
@@ -76,6 +128,7 @@ function render(): void {
     drawBackdrop(backdropEl, panel);
     placeEl.textContent = PLACES[panel].label;
   }
+  audio?.setPlace(panel);
   comic.classList.toggle("frozen", view.frozen);
 
   const cast = view.cast.join(",");
@@ -111,6 +164,7 @@ function showChoices(): void {
       const b = document.createElement("button");
       b.textContent = choice.text;
       b.addEventListener("click", () => {
+        audio?.choice();
         story.ChooseChoiceIndex(choice.index);
         choicesEl.replaceChildren();
         step();
@@ -148,6 +202,8 @@ function step(): void {
     view.frozen = staging.freeze;
     view.pending = staging.minigame ?? null;
     render();
+    if (beat.kind === "card") audio?.card();
+    if (staging.freeze) audio?.freeze();
     save();
     nextBtn.hidden = false;
     nextBtn.textContent = view.pending ? "Play" : "Next";
@@ -161,6 +217,7 @@ function step(): void {
 }
 
 function finish(): void {
+  audio?.silence();
   save(true);
   act.onEnd?.(story);
   show("end");
@@ -189,6 +246,8 @@ function openScene(scene: string): void {
   overlay.append(frame);
   document.body.append(overlay);
   frame.focus();
+  // The scene has its own sound.
+  audio?.pause(true);
 }
 
 window.addEventListener("message", (e: MessageEvent<SceneResult>) => {
@@ -197,6 +256,7 @@ window.addEventListener("message", (e: MessageEvent<SceneResult>) => {
   story.variablesState.$(`${e.data.scene}_result`, e.data.outcome);
   overlay.remove();
   overlay = null;
+  audio?.pause(false);
   view.pending = null;
   nextBtn.textContent = "Next";
   step();
@@ -218,6 +278,7 @@ function show(name: keyof typeof screens): void {
 }
 
 function start(saved: Save | null): void {
+  startAudio();
   story = new Story(act.json);
   view = { panel: "casino-exterior", cast: [], beats: [], frozen: false, card: null };
   if (saved) {
@@ -243,6 +304,8 @@ function start(saved: Save | null): void {
 /** Wire up the page's title and end screens for one act. */
 export function runAct(options: ActOptions): void {
   act = options;
+  showSound();
+  screens.play.append(soundBtn);
   version = storyVersion(act.json);
   drawCovers();
   const saved = loadSave(act.saveKey);
