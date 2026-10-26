@@ -1,7 +1,8 @@
 import act1 from "./act1.ink";
 import act2 from "./act2.ink";
 import { runAct } from "./player";
-import { SAVE_KEYS, savedFlags } from "./saves";
+import { savedFlags } from "./carry";
+import { SAVE_KEYS } from "./saves";
 
 /** Act one's choices that act two reads. */
 const CARRIED = ["leaked", "theo_rescue", "leo_open", "dee_wary", "vince_helped"] as const;

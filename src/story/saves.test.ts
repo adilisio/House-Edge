@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 import act1 from "./act1.ink";
 import act1Source from "./act1.ink?raw";
 import act2 from "./act2.ink";
-import { finishedFlags, storyVersion } from "./saves";
+import { finishedFlags } from "./carry";
+import { storyVersion } from "./saves";
 
 /** Play a story with the first choice every time, stopping after `steps` choices if given. */
 function play(json: string, steps = Infinity, setup?: (s: Story) => void): Story {

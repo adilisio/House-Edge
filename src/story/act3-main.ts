@@ -3,7 +3,8 @@ import act2 from "./act2.ink";
 import act3 from "./act3.ink";
 import { drawCover } from "./art/panel";
 import { runAct } from "./player";
-import { ENDINGS, SAVE_KEYS, endingsFound, recordEnding, savedFlags } from "./saves";
+import { savedFlags } from "./carry";
+import { ENDINGS, SAVE_KEYS, endingsFound, recordEnding } from "./saves";
 
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector(sel) as T;
 
