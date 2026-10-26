@@ -218,18 +218,26 @@ function handle(events: LockEvent[]): void {
   }
 }
 
+function vibrate(pattern: number | number[]): void {
+  try {
+    navigator.vibrate?.(pattern);
+  } catch {
+    // Not available everywhere (iOS, embedded frames); the flash still shows.
+  }
+}
+
 function showClick(): void {
   flash.classList.remove("on");
   void flash.getBoundingClientRect(); // restart the animation
   flash.classList.add("on");
-  navigator.vibrate?.(12);
+  vibrate(12);
 }
 
 function shake(): void {
   dial.classList.remove("shake");
   void dial.getBoundingClientRect();
   dial.classList.add("shake");
-  navigator.vibrate?.([40, 30, 40]);
+  vibrate([40, 30, 40]);
 }
 
 function say(text: string, guard = false): void {

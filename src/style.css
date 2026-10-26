@@ -8,6 +8,7 @@
   --teal: #2ec4b6;
   --steel: #b8c0cc;
   --steel-dark: #59606b;
+  color-scheme: dark;
 }
 
 * {
@@ -33,7 +34,9 @@ body {
 #app {
   width: 100%;
   max-width: 560px;
-  padding: 16px;
+  padding-block: 16px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 
 .screen {
