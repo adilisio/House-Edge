@@ -64,7 +64,7 @@ VAR dee_won = false
 ~ slot = 0
 Day one # card
 The crew's hideout is a rented garage on Pier Street with a coffee machine and a whiteboard. # panel: hideout # cast: Sam, Leo, Vince, Dee, Theo
-LEO: Bad news. Security on the vault floor doubled overnight. Four guards where there were two.
+LEO: Bad news. Security doubled overnight. Four guards on the doors where there were two.
 VINCE: Overnight. The night after we all met. Somebody talked.
 He doesn't look at anyone. Then he looks at Dee.
 DEE: Careful.
@@ -147,7 +147,7 @@ LEO: You're taking this awfully well.
 
 === leo_office ===
 That night, you wait in the staff corridor while Leo drops the day's table counts at Crane's office. # panel: office-hall # cast: Sam
-He's inside for a minute. Through the gap in the door you see him straighten a picture frame on Crane's desk. # cast: Sam, Leo
+He's inside for a minute. Through the gap in the door you see him straighten a picture frame on Crane's wall. # cast: Sam, Leo
 When he comes out, he hands you an old photo instead of a greeting. Two men by a roulette wheel, arms round each other.
 LEO: My dad. And Crane, before he was Crane. Thirty years ago, they were partners too.
 { leo_open: He doesn't finish the story. After what you said at his table, he doesn't need to. | He doesn't say how that ended. You can guess. }
@@ -172,7 +172,7 @@ You find Theo on the hideout roof, staring at the casino lights. # panel: roofto
     ~ theo_resp = "confront"
     SAM: You should have told me. If Crane finds out you're with us, your brother's debt is a leash.
     THEO: Then I'll pay it! I'll go tonight and sort it out myself!
-    He's down the fire escape before you can stop him. He'll be back. But he went straight to his brother, and anyone watching his brother saw him come.
+    He's down the fire escape before you can stop him. He'll be back. But he's gone straight to his brother, and anyone watching his brother will see him come.
 * [Help him: pay the debt]
     ~ theo_resp = "help"
     You put an envelope on the ledge beside him. Most of your own stake.
@@ -239,7 +239,7 @@ You find Dee at the diner on Fifth, the same stool, the same black coffee. # pan
     SAM: Kessler. Get me into that office on gala night, and you'll hear Crane say it himself.
 * [Help her case without saying a word]
     ~ dee_resp = "help"
-    You leave a folder on the stool beside her and walk out without a word: copies of Crane's old books, five years of them, with Kessler's name circled.
+    You leave a folder on the stool beside her and walk out without a word: copies of Kessler's old case notes on you, with every gap circled.
     The next morning, she's at the hideout early. She doesn't mention the folder. She does bring you a coffee.
 * [Use her cover to feed the police false information]
     ~ dee_resp = "quiet"
@@ -252,7 +252,7 @@ You find Dee at the diner on Fifth, the same stool, the same black coffee. # pan
 
 === scout_poker_scene ===
 ~ scout_poker = true
-You spend an evening at the high-limit room's rail, watching the high roller lose politely. # panel: high-limit # cast: Sam, High Roller
+You spend a few hours at the high-limit room's rail, watching the high roller lose politely. # panel: high-limit # cast: Sam, High Roller
 Every time he gets bored, he twists the ring on his little finger. Then his eyes wander. # cast: High Roller
 Now you know what boredom looks like on him. On gala night, you'll see it coming.
 -> spent
@@ -267,7 +267,7 @@ You practise until you can feel it coming. Theo's impressed. You can tell, becau
 === scout_vault_scene ===
 ~ scout_vault = true
 Leo gets you as far as the vault floor's service door, five minutes before a shift change. # panel: vault-floor # cast: Sam, Leo
-Through the gap you see it: a Harlow dial, the old kind. The tumblers click loud enough to hear if the room is quiet.
+Through the gap you see it: { leaked == "vault" and day == 3: Crane's new dial, still shiny. | a Harlow dial, the old kind. } The tumblers click loud enough to hear if the room is quiet.
 LEO: It won't be quiet on gala night.
 SAM: It will be for me.
 -> spent
@@ -290,6 +290,6 @@ Nobody says much. Everyone is keeping something back. You most of all.
 { theo_safe: Theo checks his phone, sees no messages from his brother, and for once looks his age. | Theo checks his phone every two minutes. }
 { vince_handled: Vince is telling a story, and you're the only one who knows it's not the story he thinks it is. | Vince is telling a story. He's very relaxed for a man about to rob a casino. }
 { dee_won: Dee catches your eye across the room and gives you the smallest nod. | Dee sits by the door, closest to the exit, watching all of you. }
-SAM: Tomorrow night, the Gilded Crane throws a party. Let's give him something to remember.
+SAM: Tomorrow night, Crane throws a party. Let's give him something to remember.
 Heist night # card
 -> END

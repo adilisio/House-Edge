@@ -1,6 +1,6 @@
 // House Edge, act one: the free demo.
 //
-// Conventions the player (src/story/main.ts) understands:
+// Conventions the player (src/story/player.ts) understands:
 //   NAME: text        a speech bubble; any other line is a caption
 //   # panel: <place>  switch the comic panel's location
 //   # cast: A, B      who is in the panel
@@ -138,7 +138,7 @@ VINCE: Then I'm in. For old times' sake.
 
 === cop_stop ===
 ~ cop_stop_done = true
-Walking back to your motel, a car pulls up beside you. Unmarked. A man leans out with a badge. # panel: street-night # cast: Sam, Kessler
+As you walk back to your motel, a car pulls up beside you. Unmarked. A man leans out with a badge. # panel: street-night # cast: Sam, Kessler
 KESSLER: Sam Hale. Detective Ray Kessler. I worked your case, back in the day.
 SAM: I remember.
 KESSLER: Then you'll remember I don't like surprises. What brings an ex-con back to Crane's part of town?
@@ -159,7 +159,7 @@ The car pulls away. You watch it until it turns the corner. # cast: Sam
 -> hub
 
 === cliffhanger ===
-A hacker, a dealer, a driver and a con artist. It's a crew. # panel: casino-floor # cast: Sam
+A kid with a head for numbers, a dealer, a driver and a con artist. It's a crew. # panel: casino-floor # cast: Sam
 You take a last look around the Gilded Crane before you leave.
 A waiter appears at your elbow with a drink you didn't order. # cast: Sam, Waiter
 WAITER: Compliments of the house.

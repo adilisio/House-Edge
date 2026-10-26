@@ -35,7 +35,7 @@ const SUSPICIOUS_LINES = ["ROLLER: What's your game, friend?", "ROLLER: Nobody b
 const ENDINGS: Record<PokerOutcome, { title: string; text: string }> = {
   clean: {
     title: "Clean",
-    text: "Vince finishes and drifts away from the next table. The high roller never once looked his way.",
+    text: "Vince finishes and drifts away from the side table. The high roller never once looked his way.",
   },
   spotted: {
     title: "Spotted",

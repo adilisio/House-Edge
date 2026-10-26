@@ -56,8 +56,9 @@ button posts the outcome back (`src/embed.ts`), and the story reads it from
 `<scene>_result`. Scouting in act two makes each scene a little easier.
 
 The three checks from act two pick one of four endings: Name cleared, Caught,
-Betrayed or Protecting Theo. The first failed check decides, but every ending
-plays every beat. Then come the reveal, which replays the four clues, and an
+Betrayed or Protecting Theo. The first failed check decides, and the scenes after
+it still play, except that going after Theo means Crane burns the ledger before
+Vince can run with it. Then come the reveal, which replays the four clues, and an
 epilogue with a line for each costly hands-on result. The end screen lists the
 endings found so far in this browser.
 
@@ -70,7 +71,7 @@ finished).
 
 Turn the dial and listen for the faint click at each number, then press **Set**.
 There are four numbers, and each click is quieter than the last, with Leo's chatter
-from the bar fading in and out over it. A wrong number makes a loud clunk and
+with the guard fading in and out over it. A wrong number makes a loud clunk and
 costs Leo time with the guard. Running out of time never ends the attempt: it
 changes how the job ends (clean, cutting it close, or seen).
 
@@ -82,9 +83,9 @@ All sound is synthesised with Web Audio, so there are no asset files yet.
 
 ## Poker table prototype
 
-Winning the hand doesn't matter. Vince is working his con at the next table, and
-his progress bar only fills while the high roller is looking at you. When the high
-roller's eyes drift toward Vince, pull him back:
+Winning the hand doesn't matter. Vince is working his con at the side table
+behind the high roller, and his progress bar only fills while the high roller is
+looking at you. When the high roller's eyes drift toward Vince, pull him back:
 
 - **Raise:** a big pull, but a lot of suspicion.
 - **Table talk:** a lighter pull, a little suspicion.

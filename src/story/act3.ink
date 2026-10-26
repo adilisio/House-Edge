@@ -7,8 +7,9 @@
 //
 // Running order (see the design doc): gala, poker, cameras, vault, check 1
 // (Theo), Crane's office, check 2 (Vince), getaway, check 3 (Dee), the
-// reveal, the epilogue. The first failed check decides the ending, but
-// nothing is skipped: every ending still plays every beat.
+// reveal, the epilogue. The first failed check decides the ending, and the
+// scenes after it still play, except that once Sam goes after Theo, Crane
+// burns the ledger before Vince can run with it.
 
 // From act one.
 VAR leaked = "vault"
@@ -85,7 +86,7 @@ THEO: Watch the fans. # minigame: cameras
 
 === vault ===
 The vault floor. Leo has talked his way up from the cage and is telling the guard about his boat. # panel: vault-floor # cast: Sam, Leo, Guard
-{ leaked == "vault": The new dial Crane had fitted three days ago stares back at you. | The dial stares back at you. }
+{ leaked == "vault": The new dial Crane had fitted yesterday morning stares back at you. | The dial stares back at you. }
 LEO: ...and that's when I said, that's not a fish, that's my wife! # minigame: vault
 { vault_result:
     - "clean":
@@ -108,7 +109,7 @@ Every alarm in the Gilded Crane goes off at once.
 
 === check_theo ===
 { theo_safe:
-    Crane's men go looking for something to bargain with. They try the van, and Theo's brother's place. # panel: alley # cast: Theo
+    Crane's men go looking for something to bargain with. They try the van, and Theo's brother's place. # panel: alley # cast: Guard
     But the debt is paid, the brother is out of town, and Theo is already gone. There's nothing to grab.
     -> crane_office
 }
@@ -120,7 +121,7 @@ THEO: Don't! Sam, don't do it!
     You drop the bag and run for the service stairs. # panel: alley # cast: Sam, Theo, Guard
     You get Theo out the back with a split lip and his laptop under his arm.
     THEO: You came back for me.
-    SAM: I told you. You're worth it.
+    SAM: Nobody on my crew gets left behind.
     But the vault is open, Crane is in his office, and nobody is watching him.
 * [Stick to the plan]
     ~ theo_held = true
@@ -138,7 +139,7 @@ CRANE: Ray. They hit the vault. I'm burning your file before anyone finds it. If
 On the vault floor, Leo presses a finger to his earpiece. The bug he planted behind that picture frame picks up every word. # panel: vault-floor # cast: Leo
 LEO: Got it. Every word, and the name.
 { ending == "theo":
-    By the time you're back inside, Crane has fed the ledger to his office fireplace. # panel: crane-window # cast: Crane
+    By the time you're back inside, Crane has fed the ledger to the basement incinerator. # panel: crane-window # cast: Crane
     The recording is all you have left. On its own, it won't be enough.
     -> getaway
 }
@@ -153,8 +154,8 @@ He snatches it and runs.
 { vince_handled:
     He runs the way you knew he would: down the service stairs, to the side door, where Leo is waiting. # cast: Vince, Leo
     LEO: I'll take that.
-    The plaques were never going to the account Vince thought they were, either. You made a phone call about that, three days ago.
-    VINCE: You knew. The whole time, you knew.
+    The plaques were never going to the account Vince thought they were, either. You made a phone call about that earlier in the week.
+    VINCE: You knew. The whole time, you knew. # cast: Sam, Vince, Leo
     SAM: Old friend. You taught me everything I know.
 - else:
     ~ proof_taken = true
@@ -192,8 +193,8 @@ Dee turns round in the dark garage. She's holding a badge. # cast: Sam, Dee
 DEE: Detective Dee Okafor. Undercover, eight months.
 { dee_won:
     She looks at the badge, then at you.
-    DEE: Kessler's on that tape?
-    { ending == "theo" or ending == "betrayed": SAM: Every word. It's not enough on its own. | SAM: Every word. And Leo has the ledger with his signature in it. }
+    DEE: Tell me you've got something on Kessler.
+    { ending == "theo" or ending == "betrayed": SAM: Leo has him on tape, every word. It's not enough on its own. | SAM: Leo has him on tape, every word. And the ledger, with his signature in it. }
     DEE: Then you were working with me all along. That's what my report is going to say.
     { ending == "":
         ~ ending = "cleared"
@@ -221,8 +222,8 @@ Three weeks earlier, on the way to your motel, a car pulled up beside you. # pan
 Because Kessler would run straight to Crane. And Crane, with a vault about to be robbed, would do the one thing he'd never done in five years: take the proof out of hiding.
 Every time Crane moved, you stayed calm. You knew he would. # panel: hideout # cast: Sam
 Kessler's card sat under your coffee cup the whole time, in plain sight.
-And the night it all began, outside the casino, you weren't looking at the vault. # panel: casino-exterior # cast: Sam # freeze
-You were looking at the man who was about to show you where the proof was.
+And tonight, on the kerb outside the casino, you weren't looking at the vault. # panel: casino-exterior # cast: Sam # freeze
+You were looking at the window of the man who had just shown you where the proof was.
 The house always has the edge. Unless you're the one dealing.
 -> epilogue
 
@@ -244,8 +245,8 @@ Five years after you went to prison for Crane's crime, a judge reads your name o
 
 === caught ===
 Caught # card
-They take your crew in one by one: Theo, Leo, and you. Dee does it by the book. # panel: street-night # cast: Sam, Dee
-In the interview room, you ask them to play Leo's recording. Three weeks later, they do. # cast: Sam, Kessler
+They take your crew in one by one: Vince, Theo, Leo and you. Dee does it by the book. # panel: street-night # cast: Sam, Dee
+In the interview room, you ask them to play Leo's recording. Three weeks later, they do. # cast: Sam
 Crane falls. So does Kessler. But you're still on the wrong side of the glass, waiting for a judge to decide what a thief with a good reason deserves.
 -> costs
 
@@ -259,13 +260,13 @@ You're free. You're just not innocent. Not on paper.
 === protecting_theo ===
 Protecting Theo # card
 The ledger is ash. Leo's recording makes the papers, and the papers make Crane nervous, but nervous isn't guilty. # panel: crane-window # cast: Crane
-Theo starts college in the autumn, paid for with what was in the vault. He sends you a postcard from his first week. # panel: rooftop # cast: Sam, Theo
+Theo starts college in the autumn, paid for with what Leo carried out of the vault. He sends you a postcard from his first week. # panel: rooftop # cast: Sam, Theo
 "You came back for me," it says. "Nobody ever came back for me."
 -> costs
 
 === costs ===
 { poker_result == "spotted": The high roller picks Vince's face out of a book of mugshots, months later. # panel: city-map # cast: Sam }
-{ poker_result == "walked": Vince complains, for a long time, about the plaques he never got. # panel: city-map # cast: Sam }
+{ poker_result == "walked" and not proof_taken: Vince complains, for a long time, about the plaques he never got. # panel: city-map # cast: Sam }
 { cameras_result == "glitched": When the security footage is reviewed, an analyst finds three seconds that jump. Nobody can explain them. # panel: city-map # cast: Sam }
 { cameras_result == "seen": Your crew's faces are on the casino's tapes, which makes everything afterwards harder. # panel: city-map # cast: Sam }
 { vault_result == "partial": You left half the vault behind. Theo still talks about it. # panel: city-map # cast: Sam }

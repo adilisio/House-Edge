@@ -53,7 +53,7 @@ const ENDINGS: Record<DriveOutcome, { title: string; text: string }> = {
   },
   chased: {
     title: "Chased",
-    text: "With sirens on every side, Dee dumps the car in an alley and you run the last blocks on foot. Whatever was in the trunk stays behind.",
+    text: "With sirens on every side, Dee dumps the car in an alley and you run the last blocks on foot. Whatever was in the boot stays behind.",
   },
 };
 
