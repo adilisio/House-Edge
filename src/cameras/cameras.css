@@ -1,0 +1,84 @@
+/* Camera loop additions on top of the shared comic style. */
+:root {
+  --crt: #13201b;
+  --crt-line: #8fc4a8;
+}
+
+.move-list {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 4px;
+}
+
+.cam-hud {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.gauge {
+  flex: 1;
+  min-width: 0;
+}
+
+.gauge-label {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.monitors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.monitor {
+  margin: 0;
+  min-width: 0;
+  background: var(--steel-dark);
+  border: 4px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  padding: 6px;
+  border-radius: 10px;
+}
+
+.monitor canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  background: var(--crt);
+  border-radius: 6px;
+}
+
+.monitor figcaption {
+  margin-top: 4px;
+  color: var(--paper);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rec-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--red);
+  border: 2px solid var(--ink);
+}
+
+button.go {
+  background: var(--teal);
+  color: var(--ink);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

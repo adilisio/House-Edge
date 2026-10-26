@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>House Edge Camera Loop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <main id="app">
+      <section id="intro" class="screen panel">
+        <h1>House Edge</h1>
+        <p class="caption">Heist night. The security corridors.</p>
+        <p>
+          Theo has recorded each empty corridor. Splice his loop into the live feed so the guard in
+          the security room sees nothing, then send the crew through.
+        </p>
+        <ul class="move-list">
+          <li><strong>Loop:</strong> cut in when the live feed matches the recording. Watch the fans, and later the light.</li>
+          <li><strong>Go:</strong> send the crew. They need to clear the corridor before the loop runs out.</li>
+        </ul>
+        <p>A bad match shows as a jump in the footage. A loop that runs out puts the crew on tape.</p>
+        <button id="start" class="big">Start the loop</button>
+      </section>
+
+      <section id="play" class="screen" hidden>
+        <div class="hud panel cam-hud">
+          <div class="tumblers" id="cams" aria-label="Cameras cleared"></div>
+          <div class="gauge">
+            <div class="gauge-label" id="crew-label">Crew at the door</div>
+            <div class="bar"><div class="fill" id="window-fill"></div></div>
+          </div>
+        </div>
+        <div class="monitors">
+          <figure class="monitor">
+            <canvas id="live" width="240" height="180"></canvas>
+            <figcaption><span class="rec-dot"></span> Live</figcaption>
+          </figure>
+          <figure class="monitor">
+            <canvas id="rec" width="240" height="180"></canvas>
+            <figcaption>Theo's recording</figcaption>
+          </figure>
+        </div>
+        <div class="bubble" id="bubble" aria-live="polite"></div>
+        <div class="controls">
+          <button id="loop" class="big">Loop</button>
+          <button id="go" class="big go">Go</button>
+        </div>
+        <p class="hint">Space to loop · Enter to send the crew</p>
+      </section>
+
+      <section id="end" class="screen panel" hidden>
+        <h1 id="end-title"></h1>
+        <p id="end-text"></p>
+        <p class="hint" id="end-stats"></p>
+        <button id="retry" class="big">Play again</button>
+      </section>
+    </main>
+    <script type="module" src="/src/cameras/main.ts"></script>
+  </body>
+</html>

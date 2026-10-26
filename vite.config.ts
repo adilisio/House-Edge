@@ -10,6 +10,7 @@ export default defineConfig({
       input: {
         vault: resolve(import.meta.dirname, "index.html"),
         poker: resolve(import.meta.dirname, "poker.html"),
+        cameras: resolve(import.meta.dirname, "cameras.html"),
       },
     },
   },
