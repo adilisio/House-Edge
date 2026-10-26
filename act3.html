@@ -35,7 +35,7 @@
           <label class="toggle"><input type="checkbox" name="scout_vault" /> Saw the vault door</label>
           <label class="toggle"><input type="checkbox" name="scout_getaway" /> Drove the getaway route</label>
         </fieldset>
-        <p class="hint">Placeholder art. Headphones help in the vault. About 20 minutes.</p>
+        <p class="hint">Headphones help in the vault. About 20 minutes.</p>
         <div class="title-actions">
           <button id="continue" class="big" hidden>Continue</button>
           <button id="new" class="big">New game</button>
@@ -44,6 +44,7 @@
 
       <section id="play" class="screen" hidden>
         <div class="comic" id="comic">
+          <div class="backdrop" id="backdrop" aria-hidden="true"></div>
           <div class="place" id="place"></div>
           <div class="cast" id="cast"></div>
           <div class="card-text" id="card-text" hidden></div>
