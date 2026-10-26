@@ -1,0 +1,307 @@
+/* Comic-book look: bold flat colours, heavy ink outlines, halftone dots. */
+:root {
+  --ink: #111;
+  --paper: #fdf6e3;
+  --night: #1b1440;
+  --gold: #f2b705;
+  --red: #e63946;
+  --teal: #2ec4b6;
+  --steel: #b8c0cc;
+  --steel-dark: #59606b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--night);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.2px, transparent 1.4px);
+  background-size: 9px 9px;
+  color: var(--ink);
+  font: 16px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+#app {
+  width: 100%;
+  max-width: 560px;
+  padding: 16px;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.screen[hidden] {
+  display: none;
+}
+
+.panel {
+  background: var(--paper);
+  border: 4px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 16px 18px;
+}
+
+h1 {
+  font-family: Bangers, Impact, sans-serif;
+  font-weight: 400;
+  letter-spacing: 1px;
+  font-size: 44px;
+  margin: 0;
+  color: var(--red);
+  -webkit-text-stroke: 1.5px var(--ink);
+}
+
+p {
+  margin: 0;
+}
+
+.caption {
+  align-self: flex-start;
+  background: var(--gold);
+  border: 3px solid var(--ink);
+  padding: 4px 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.hint {
+  font-size: 13px;
+  color: #555;
+}
+
+#play .hint {
+  color: #c9c3e6;
+  text-align: center;
+}
+
+.toggle {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  box-shadow: 3px 3px 0 var(--ink);
+  min-height: 48px;
+  min-width: 48px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+button.big {
+  font-family: Bangers, Impact, sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: 1px;
+  background: var(--red);
+  color: #fff;
+  padding: 6px 22px;
+}
+
+button:focus-visible,
+#dial:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 3px;
+}
+
+.hud {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 10px 14px;
+}
+
+.tumblers {
+  display: flex;
+  gap: 6px;
+}
+
+.pip {
+  width: 22px;
+  height: 22px;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.pip.done {
+  background: var(--teal);
+}
+
+.pip.current {
+  background: var(--gold);
+}
+
+.stall {
+  flex: 1;
+  min-width: 0;
+}
+
+.stall-label {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bar {
+  height: 14px;
+  border: 3px solid var(--ink);
+  background: #fff;
+  margin-top: 4px;
+}
+
+.fill {
+  height: 100%;
+  width: 100%;
+  background: var(--teal);
+}
+
+.fill.low {
+  background: var(--gold);
+}
+
+.fill.out {
+  background: var(--red);
+}
+
+.bubble {
+  align-self: center;
+  min-height: 44px;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: center;
+  max-width: 100%;
+}
+
+.bubble:empty {
+  visibility: hidden;
+}
+
+.bubble.guard {
+  background: var(--gold);
+}
+
+.dial-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+#dial {
+  width: min(88vw, 52vh, 460px);
+  height: auto;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+
+#dial.dragging {
+  cursor: grabbing;
+}
+
+#dial .face {
+  fill: var(--steel);
+  stroke: var(--ink);
+  stroke-width: 4;
+}
+
+#dial .rim {
+  fill: var(--steel-dark);
+  stroke: var(--ink);
+  stroke-width: 4;
+}
+
+#dial .tick {
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+#dial .tick.major {
+  stroke-width: 2.2;
+}
+
+#dial .num {
+  font: 700 11px system-ui, sans-serif;
+  fill: var(--ink);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+#dial .knob {
+  fill: var(--steel-dark);
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
+#dial .marker {
+  fill: var(--red);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+#dial .flash {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 6;
+  opacity: 0;
+}
+
+#dial .flash.on {
+  animation: flash 0.35s ease-out;
+}
+
+@keyframes flash {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+#dial.shake {
+  animation: shake 0.25s;
+}
+
+@keyframes shake {
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
