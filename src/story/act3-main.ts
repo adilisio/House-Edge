@@ -24,11 +24,11 @@ $("#setup").hidden = fromAct2 !== null;
 $("#leak-pick").hidden = fromAct1 !== null;
 
 /** The last picture of each ending. */
-const ENDING_COVERS: Record<string, { place: string; cast: string }> = {
-  cleared: { place: "casino-floor", cast: "Sam, Leo, Theo, Dee" },
-  caught: { place: "street-night", cast: "Sam, Dee" },
-  betrayed: { place: "gallery", cast: "Vince" },
-  theo: { place: "rooftop", cast: "Sam, Theo" },
+const ENDING_COVERS: Record<string, { place: string; cast: string; moods: string }> = {
+  cleared: { place: "casino-floor", cast: "Sam, Leo, Theo, Dee", moods: "Sam happy, Leo happy, Theo happy, Dee happy" },
+  caught: { place: "street-night", cast: "Sam, Dee", moods: "Sam sad" },
+  betrayed: { place: "gallery", cast: "Vince", moods: "Vince happy" },
+  theo: { place: "rooftop", cast: "Sam, Theo", moods: "Sam happy, Theo happy" },
 };
 
 function showEndings(): void {
