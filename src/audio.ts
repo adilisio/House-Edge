@@ -1,24 +1,17 @@
-// All sound is synthesised with Web Audio, so the prototype needs no assets.
-// The tumbler click is deliberately close to the dial's tick: lower and
-// woodier rather than much louder, so you have to listen for it.
+// Vault sounds, all synthesised. The tumbler click is deliberately close to
+// the dial's tick: lower and woodier rather than much louder, so you have to
+// listen for it.
 
-export class VaultAudio {
-  private ctx: AudioContext;
-  private master: GainNode;
-  private noise: AudioBuffer;
+import { Synth } from "./synth";
+
+export class VaultAudio extends Synth {
   private chatterBus: GainNode;
   private stepsBus: GainNode;
-  private timers: number[] = [];
   private chatterUrgency = 0;
   private stepsLevel = 0;
 
   constructor() {
-    this.ctx = new AudioContext();
-    const comp = this.ctx.createDynamicsCompressor();
-    comp.threshold.value = -12;
-    comp.connect(this.ctx.destination);
-    this.master = this.gain(0.9, comp);
-    this.noise = this.makeNoise(2);
+    super();
     // Leo is across the room, so his voice is muffled.
     const muffle = this.ctx.createBiquadFilter();
     muffle.type = "lowpass";
@@ -29,16 +22,10 @@ export class VaultAudio {
   }
 
   async start(): Promise<void> {
-    await this.ctx.resume();
+    await this.resume();
     this.startAmbience();
     this.scheduleSyllable();
     this.scheduleStep();
-  }
-
-  stop(): void {
-    this.timers.forEach((t) => clearTimeout(t));
-    this.timers = [];
-    void this.ctx.close();
   }
 
   /** 0..1, how loud Leo's chatter is right now. */
@@ -61,8 +48,8 @@ export class VaultAudio {
   click(gain: number): void {
     const t = this.ctx.currentTime + 0.004;
     this.burst(t, 0.02, "bandpass", 1700, 3, gain * 0.5);
-    this.ping(t, 1180, 0.05, gain * 0.35);
-    this.ping(t, 2650, 0.03, gain * 0.15);
+    this.tone(t, "sine", 1180, 0.05, gain * 0.35);
+    this.tone(t, "sine", 2650, 0.03, gain * 0.15);
   }
 
   clunk(): void {
@@ -89,22 +76,15 @@ export class VaultAudio {
   }
 
   private startAmbience(): void {
-    // Casino-floor rumble: looped, heavily filtered noise.
-    const src = this.ctx.createBufferSource();
-    src.buffer = this.noise;
-    src.loop = true;
-    const lp = this.ctx.createBiquadFilter();
-    lp.type = "lowpass";
-    lp.frequency.value = 320;
-    src.connect(lp).connect(this.gain(0.12, this.master));
-    src.start();
+    // Casino-floor rumble with the odd distant slot-machine chime.
+    this.rumble(320, 0.12);
     const chime = () => {
       const t = this.ctx.currentTime;
       const base = [523, 659, 784, 1047][Math.floor(Math.random() * 4)];
-      [0, 0.09, 0.18].forEach((d, i) => this.ping(t + d, base * [1, 1.25, 1.5][i], 0.4, 0.012));
-      this.timers.push(window.setTimeout(chime, 3000 + Math.random() * 6000));
+      [0, 0.09, 0.18].forEach((d, i) => this.tone(t + d, "sine", base * [1, 1.25, 1.5][i], 0.4, 0.012));
+      this.later(chime, 3000 + Math.random() * 6000);
     };
-    this.timers.push(window.setTimeout(chime, 2000));
+    this.later(chime, 2000);
   }
 
   /** A babble syllable: a buzzy voice through two moving formants. */
@@ -133,76 +113,13 @@ export class VaultAudio {
     osc.stop(t + len + 0.02);
     // Words run together, with a pause between phrases.
     const pause = Math.random() < 0.12 ? 0.4 + Math.random() * 0.8 : 0.02;
-    this.timers.push(window.setTimeout(() => this.scheduleSyllable(), (len + pause) * 1000));
+    this.later(() => this.scheduleSyllable(), (len + pause) * 1000);
   }
 
   private scheduleStep(): void {
     if (this.stepsLevel > 0.01) {
-      const t = this.ctx.currentTime;
-      const g = this.gain(0, this.stepsBus);
-      const src = this.ctx.createBufferSource();
-      src.buffer = this.noise;
-      const lp = this.ctx.createBiquadFilter();
-      lp.type = "lowpass";
-      lp.frequency.value = 220;
-      src.connect(lp).connect(g);
-      g.gain.setValueAtTime(0.9, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
-      src.start(t, Math.random());
-      src.stop(t + 0.2);
+      this.burst(this.ctx.currentTime, 0.16, "lowpass", 220, 1, 0.9, this.stepsBus);
     }
-    this.timers.push(window.setTimeout(() => this.scheduleStep(), 560));
-  }
-
-  private burst(
-    t: number,
-    dur: number,
-    type: BiquadFilterType,
-    freq: number,
-    q: number,
-    gain: number,
-  ): void {
-    const src = this.ctx.createBufferSource();
-    src.buffer = this.noise;
-    const f = this.ctx.createBiquadFilter();
-    f.type = type;
-    f.frequency.value = freq;
-    f.Q.value = q;
-    const g = this.gain(0, this.master);
-    g.gain.setValueAtTime(gain, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    src.connect(f).connect(g);
-    src.start(t, Math.random() * 1.5);
-    src.stop(t + dur + 0.02);
-  }
-
-  private ping(t: number, freq: number, dur: number, gain: number): void {
-    this.tone(t, "sine", freq, dur, gain);
-  }
-
-  private tone(t: number, type: OscillatorType, freq: number, dur: number, gain: number): void {
-    const osc = this.ctx.createOscillator();
-    osc.type = type;
-    osc.frequency.value = freq;
-    const g = this.gain(0, this.master);
-    g.gain.setValueAtTime(gain, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    osc.connect(g);
-    osc.start(t);
-    osc.stop(t + dur + 0.02);
-  }
-
-  private gain(value: number, dest: AudioNode): GainNode {
-    const g = this.ctx.createGain();
-    g.gain.value = value;
-    g.connect(dest);
-    return g;
-  }
-
-  private makeNoise(seconds: number): AudioBuffer {
-    const buf = this.ctx.createBuffer(1, this.ctx.sampleRate * seconds, this.ctx.sampleRate);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-    return buf;
+    this.later(() => this.scheduleStep(), 560);
   }
 }

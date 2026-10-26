@@ -45,8 +45,9 @@ body {
   gap: 12px;
 }
 
+[hidden],
 .screen[hidden] {
-  display: none;
+  display: none !important;
 }
 
 .panel {
@@ -99,6 +100,7 @@ p {
 
 button {
   font: inherit;
+  color: var(--ink);
   cursor: pointer;
   border: 3px solid var(--ink);
   background: var(--paper);

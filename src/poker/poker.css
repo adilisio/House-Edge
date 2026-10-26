@@ -1,0 +1,205 @@
+/* Poker table additions on top of the shared comic style. */
+:root {
+  --felt: #1f7a4d;
+  --felt-dark: #145236;
+  --skin: #e9b48a;
+  --suit: #2b2d42;
+}
+
+.move-list {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 4px;
+}
+
+.gauges {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.gauge {
+  min-width: 0;
+}
+
+.gauge-label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.scene {
+  position: relative;
+  border: 4px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  background: var(--felt);
+  transition: border-color 0.15s;
+}
+
+.scene.drifting {
+  border-color: var(--gold);
+}
+
+.scene.looking {
+  border-color: var(--red);
+}
+
+#roller {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.watch {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  background: var(--red);
+  color: #fff;
+  border: 3px solid var(--ink);
+  padding: 2px 10px;
+  font-family: Bangers, Impact, sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+
+.stare-pad {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(17, 17, 17, 0.35);
+}
+
+.ring,
+.chip {
+  grid-area: 1 / 1;
+  border-radius: 50%;
+}
+
+.ring {
+  width: 96px;
+  height: 96px;
+  border: 4px dashed var(--paper);
+}
+
+.chip {
+  width: 30px;
+  height: 30px;
+  background: var(--red);
+  border: 4px dotted var(--paper);
+  box-shadow: 0 0 0 3px var(--ink);
+}
+
+.chip.out {
+  background: var(--gold);
+}
+
+.stare-hint {
+  position: absolute;
+  bottom: 8px;
+  color: var(--paper);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.moves {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+button.move {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 18px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+button.move small {
+  font-size: 12px;
+  font-weight: 500;
+  color: #444;
+}
+
+button.move:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+button.move.active {
+  background: var(--gold);
+}
+
+#roller .felt {
+  fill: var(--felt);
+}
+
+#roller .felt-line {
+  fill: none;
+  stroke: var(--felt-dark);
+  stroke-width: 3;
+}
+
+#roller .ink {
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+#roller .skin {
+  fill: var(--skin);
+}
+
+#roller .suit {
+  fill: var(--suit);
+}
+
+#roller .hair {
+  fill: var(--ink);
+}
+
+#roller .white {
+  fill: #fff;
+}
+
+#roller .pupil {
+  fill: var(--ink);
+}
+
+#roller .shirt {
+  fill: var(--paper);
+}
+
+#roller .gold {
+  fill: var(--gold);
+}
+
+#roller .cigar {
+  fill: #7a4a2a;
+}
+
+#roller .inset {
+  fill: var(--paper);
+}
+
+#roller .vince {
+  fill: var(--steel-dark);
+}
+
+#roller .label {
+  font: 400 15px Bangers, Impact, sans-serif;
+  letter-spacing: 1px;
+  fill: var(--ink);
+}
+
+#roller .freeze {
+  font: 400 16px Bangers, Impact, sans-serif;
+  fill: var(--red);
+}

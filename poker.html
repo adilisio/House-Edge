@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>House Edge Poker Table</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <main id="app">
+      <section id="intro" class="screen panel">
+        <h1>House Edge</h1>
+        <p class="caption">Heist night. The high-limit room.</p>
+        <p>
+          Vince is working his con at the next table. Keep the high roller looking at you until
+          Vince is done. When his eyes drift toward Vince, pull him back.
+        </p>
+        <ul class="move-list">
+          <li><strong>Raise:</strong> grabs him, but makes him suspicious.</li>
+          <li><strong>Table talk:</strong> a lighter pull, a little suspicion.</li>
+          <li><strong>Stare him down:</strong> press and hold, and keep the chip in the ring.</li>
+          <li><strong>Check:</strong> lets his suspicion cool, but he'll look away.</li>
+        </ul>
+        <p>Playing the same move twice in a row looks rehearsed.</p>
+        <button id="start" class="big">Take a seat</button>
+      </section>
+
+      <section id="play" class="screen" hidden>
+        <div class="hud panel gauges">
+          <div class="gauge">
+            <div class="gauge-label">Vince's con</div>
+            <div class="bar"><div class="fill" id="con-fill"></div></div>
+          </div>
+          <div class="gauge">
+            <div class="gauge-label">His suspicion</div>
+            <div class="bar"><div class="fill out" id="sus-fill"></div></div>
+          </div>
+        </div>
+        <div class="scene" id="scene">
+          <svg id="roller" viewBox="0 0 300 210" aria-hidden="true"></svg>
+          <div class="watch" id="watch" hidden>He's watching Vince!</div>
+          <div class="stare-pad" id="stare-pad" hidden>
+            <div class="ring"></div>
+            <div class="chip" id="chip"></div>
+            <div class="stare-hint">Keep the chip in the ring</div>
+          </div>
+        </div>
+        <div class="bubble" id="bubble" aria-live="polite"></div>
+        <div class="moves">
+          <button class="move" data-move="raise"><span>Raise</span><small>Big pull · big suspicion</small></button>
+          <button class="move" data-move="talk"><span>Table talk</span><small>Some pull · a little suspicion</small></button>
+          <button class="move" data-move="stare"><span>Stare him down</span><small>Press and hold steady</small></button>
+          <button class="move" data-move="check"><span>Check</span><small>Cools suspicion · no pull</small></button>
+        </div>
+        <p class="hint">Keys 1–4 for the moves · during a stare, arrow keys steady the chip</p>
+      </section>
+
+      <section id="end" class="screen panel" hidden>
+        <h1 id="end-title"></h1>
+        <p id="end-text"></p>
+        <p class="hint" id="end-stats"></p>
+        <button id="retry" class="big">Play again</button>
+      </section>
+    </main>
+    <script type="module" src="/src/poker/main.ts"></script>
+  </body>
+</html>
