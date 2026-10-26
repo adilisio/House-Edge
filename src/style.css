@@ -305,6 +305,14 @@ button:focus-visible,
   }
 }
 
+/* The dial keeps still for players who ask for less motion; the clunk and
+   the buzz still land. The click flash stays: it stands in for sound. */
+@media (prefers-reduced-motion: reduce) {
+  #dial.shake {
+    animation: none;
+  }
+}
+
 .controls {
   display: flex;
   justify-content: center;

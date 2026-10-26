@@ -35,6 +35,12 @@
   animation: pop-in 0.2s ease-out;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .beat {
+    animation: none;
+  }
+}
+
 .beat.old {
   opacity: 0.55;
 }

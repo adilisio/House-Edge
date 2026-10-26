@@ -194,6 +194,8 @@ window.addEventListener("message", (e: MessageEvent<SceneResult>) => {
   view.pending = null;
   nextBtn.textContent = "Next";
   step();
+  // Focus went with the frame; put it back where the story continues.
+  if (!nextBtn.hidden) nextBtn.focus();
 });
 
 nextBtn.addEventListener("click", next);
