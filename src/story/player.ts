@@ -5,7 +5,8 @@
 import "../style.css";
 import "./story.css";
 import { Story } from "inkjs";
-import { CHARACTERS, PLACES } from "./art";
+import { PLACES } from "./art";
+import { drawBackdrop, drawCast, drawCovers, placeOrDefault } from "./art/panel";
 import type { SceneResult } from "../embed";
 import { parseLine, type Beat } from "./beats";
 import { loadSave, writeSave, type Save } from "./saves";
@@ -66,30 +67,15 @@ function save(done = false): void {
 let drawn = { panel: "", cast: "" };
 
 function render(): void {
-  const panel = PLACES[view.panel] ? view.panel : "city-map";
+  const panel = placeOrDefault(view.panel);
   if (panel !== drawn.panel) {
-    // The art is our own markup, never story text.
-    backdropEl.innerHTML = `<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">${PLACES[panel].svg}</svg>`;
+    drawBackdrop(backdropEl, panel);
     placeEl.textContent = PLACES[panel].label;
   }
   comic.classList.toggle("frozen", view.frozen);
 
   const cast = view.cast.join(",");
-  if (cast !== drawn.cast) {
-    castEl.dataset.count = String(view.cast.length);
-    castEl.replaceChildren(
-      ...view.cast.map((name) => {
-        const fig = document.createElement("div");
-        fig.className = "figure";
-        fig.innerHTML = `<svg viewBox="0 0 120 182" aria-hidden="true">${CHARACTERS[name]?.svg ?? ""}</svg>`;
-        const label = document.createElement("div");
-        label.className = "name";
-        label.textContent = name;
-        fig.append(label);
-        return fig;
-      }),
-    );
-  }
+  if (cast !== drawn.cast) drawCast(castEl, view.cast);
   drawn = { panel, cast };
 
   cardEl.hidden = view.card === null;
@@ -248,6 +234,7 @@ function start(saved: Save | null): void {
 /** Wire up the page's title and end screens for one act. */
 export function runAct(options: ActOptions): void {
   act = options;
+  drawCovers();
   continueBtn.hidden = !loadSave(act.saveKey);
   continueBtn.addEventListener("click", () => start(loadSave(act.saveKey)));
   $("#new").addEventListener("click", () => start(null));

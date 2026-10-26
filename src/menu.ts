@@ -1,5 +1,8 @@
 import "./style.css";
+import { drawCovers } from "./story/art/panel";
 import { ENDINGS, endingsFound, loadSave } from "./story/saves";
+
+drawCovers();
 
 // Point the big button at the first act not yet played to its end, and tick
 // off the acts that have been.
