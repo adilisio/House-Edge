@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>House Edge Getaway</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <main id="app">
+      <section id="intro" class="screen panel">
+        <h1>House Edge</h1>
+        <p class="caption">Heist night. The getaway.</p>
+        <p>
+          Dee drives. You hold the map and call each turn before she reaches the junction. Get her
+          to the garage in the top corner.
+        </p>
+        <ul class="move-list">
+          <li><strong>Left, Straight, Right</strong> are from Dee's seat, not the map. Heading down the map, her left is your right.</li>
+          <li>Call early. A last-second call makes her brake hard, and that's noise.</li>
+          <li>Patrol cars see straight along their street. Roadblocks go up ahead of you, with a moment's warning.</li>
+        </ul>
+        <p>Being seen raises the heat. If it maxes out, you ditch the car and run.</p>
+        <button id="start" class="big">Drive</button>
+      </section>
+
+      <section id="play" class="screen" hidden>
+        <div class="hud panel">
+          <div class="gauge">
+            <div class="gauge-label" id="heat-label">Heat</div>
+            <div class="bar"><div class="fill out" id="heat-fill"></div></div>
+          </div>
+        </div>
+        <div class="map-wrap">
+          <canvas id="map" aria-label="City map"></canvas>
+        </div>
+        <div class="bubble" id="bubble" aria-live="polite"></div>
+        <div class="turns">
+          <button class="turn" data-turn="left" aria-label="Left">&#8630; Left</button>
+          <button class="turn" data-turn="straight" aria-label="Straight on">&#8593; Straight</button>
+          <button class="turn" data-turn="right" aria-label="Right">Right &#8631;</button>
+        </div>
+        <p class="hint">Arrow keys: ← left, ↑ straight, → right (from Dee's seat)</p>
+      </section>
+
+      <section id="end" class="screen panel" hidden>
+        <h1 id="end-title"></h1>
+        <p id="end-text"></p>
+        <p class="hint" id="end-stats"></p>
+        <button id="retry" class="big">Drive again</button>
+      </section>
+    </main>
+    <script type="module" src="/src/getaway/main.ts"></script>
+  </body>
+</html>

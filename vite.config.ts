@@ -11,6 +11,7 @@ export default defineConfig({
         vault: resolve(import.meta.dirname, "index.html"),
         poker: resolve(import.meta.dirname, "poker.html"),
         cameras: resolve(import.meta.dirname, "cameras.html"),
+        getaway: resolve(import.meta.dirname, "getaway.html"),
       },
     },
   },

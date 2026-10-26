@@ -1,0 +1,41 @@
+/* Getaway additions on top of the shared comic style. */
+.move-list {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 4px;
+}
+
+.gauge-label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.map-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+#map {
+  display: block;
+  width: min(100%, 46vh, 420px);
+  height: auto;
+  border: 4px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.turns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+button.turn {
+  font-size: 18px;
+  padding: 6px 4px;
+  touch-action: manipulation;
+}
+
+button.turn.called {
+  background: var(--gold);
+}

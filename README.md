@@ -1,9 +1,10 @@
 # House Edge
 
-A story-driven heist game for the browser. This repo currently holds three
-prototypes of heist-night hands-on moments: cracking Crane's vault by ear
-(`index.html`), keeping a high roller's eyes off Vince (`poker.html`), and
-splicing Theo's camera loops (`cameras.html`).
+A story-driven heist game for the browser. This repo currently holds
+prototypes of all four heist-night hands-on moments: cracking Crane's vault by
+ear (`index.html`), keeping a high roller's eyes off Vince (`poker.html`),
+splicing Theo's camera loops (`cameras.html`), and navigating Dee's getaway
+(`getaway.html`).
 
 ## Vault prototype
 
@@ -50,12 +51,27 @@ splicing too early wastes the loop.
 The scene ends **clean**, **glitched** (a bad match made the footage jump), or
 **seen** (the loop ran out with the crew in shot). Keys: Space to loop, Enter to go.
 
+## Getaway prototype
+
+Dee drives a grid of city streets toward the garage in the top corner. You call
+each turn before she reaches the junction: **Left**, **Straight** or **Right**,
+from her seat rather than the map. The next junction and the way she'll go are
+marked on the map. A call made in the last fifth of a block makes her brake
+hard, which costs time and adds heat.
+
+Patrol cars see straight along their street (the yellow band), and roadblocks
+go up ahead of you after a few seconds' warning on the scanner. Being seen
+raises heat, which cools slowly out of sight. The scene ends **clean**, **made**
+(the police got a look at the car), or **chased** (heat maxed out and you ditched
+the car). Dee's act-two choice to turn on you is left out of this prototype.
+Keys: ← ↑ → for the calls.
+
 ## Development
 
 ```sh
 npm install
 npm run dev        # local dev server
-npm test           # rule tests for all three scenes
+npm test           # rule tests for all four scenes
 npm run build      # typecheck and build to dist/
 ```
 
@@ -65,5 +81,7 @@ npm run build      # typecheck and build to dist/
   and tuning, sounds, and screen
 - `src/cameras/loop.ts`, `src/cameras/audio.ts`, `src/cameras/main.ts`: camera
   loop rules and tuning, sounds, and screen
+- `src/getaway/drive.ts`, `src/getaway/audio.ts`, `src/getaway/main.ts`:
+  getaway rules and tuning, sounds, and map screen
 - `src/synth.ts`: shared Web Audio helpers
 - `src/style.css`: shared comic-book styling
